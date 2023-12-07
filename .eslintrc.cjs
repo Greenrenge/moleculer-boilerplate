@@ -48,5 +48,13 @@ module.exports = {
       },
     ],
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [['@', './src']],
+        extensions: ['.js', '.jsx', '.json'],
+      },
+    },
+  },
   plugins: ['prettier', 'mocha'],
 }

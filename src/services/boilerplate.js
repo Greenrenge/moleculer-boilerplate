@@ -1,4 +1,4 @@
-import { Boilerplate } from '../models/boilerplate.js'
+import { Boilerplate } from '@/models/boilerplate.js'
 
 /**
  * @typedef {import('moleculer').ServiceBroker} ServiceBroker

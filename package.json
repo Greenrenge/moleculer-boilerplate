@@ -3,27 +3,25 @@
   "version": "1.0.0",
   "description": "Backend Boilerplate",
   "main": "src/index.js",
+  "exports": "./src/index.js",
   "type": "module",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon --watch src ",
+    "start": "cross-env NODE_ENV=development nodemon --loader esm-module-alias/loader --no-warnings --watch src ",
     "start:repl": "REPL=true npm run start",
-    "start:prod": "cross-env NODE_ENV=production node src/index.js",
+    "start:prod": "cross-env NODE_ENV=production node --loader esm-module-alias/loader --no-warnings src/index.js",
     "lint": "eslint --ignore-path .eslintignore .",
-    "prebuild": "npm run clean",
-    "build": "babel src -s -d build",
-    "test": "cross-env NODE_ENV=test mocha --recursive \"test/**/*.test.js\" --timeout 60000",
+    "test": "cross-env NODE_ENV=test node --loader esm-module-alias/loader --no-warnings ./node_modules/mocha/bin/mocha --recursive \"test/**/*.test.js\" --timeout 60000",
     "test:watch": "cross-env NODE_ENV=test nodemon --watch test --watch src --exec npm run test",
-    "clean": "rimraf ./build",
-    "migrate": "./node_modules/migrate-mongo/bin/migrate-mongo.js",
-    "migrate:create": "./node_modules/migrate-mongo/bin/migrate-mongo.js create",
-    "migrate:up": "./node_modules/migrate-mongo/bin/migrate-mongo.js up",
-    "migrate:down": "./node_modules/migrate-mongo/bin/migrate-mongo.js down",
-    "migrate:status": "./node_modules/migrate-mongo/bin/migrate-mongo.js status",
-    "seed:simple": "cross-env LIGHTSHIP_RANDOM_PORT=true babel-node seeds/simple-seed.js",
-    "seed:simple:prod": "cross-env NODE_ENV=production LIGHTSHIP_RANDOM_PORT=true babel-node seeds/simple-seed.js"
+    "migrate": "node --loader esm-module-alias/loader --no-warnings ./node_modules/migrate-mongo/bin/migrate-mongo.js",
+    "migrate:create": "node --loader esm-module-alias/loader --no-warnings ./node_modules/migrate-mongo/bin/migrate-mongo.js create",
+    "migrate:up": "node --loader esm-module-alias/loader --no-warnings ./node_modules/migrate-mongo/bin/migrate-mongo.js up",
+    "migrate:down": "node --loader esm-module-alias/loader --no-warnings ./node_modules/migrate-mongo/bin/migrate-mongo.js down",
+    "migrate:status": "node --loader esm-module-alias/loader --no-warnings ./node_modules/migrate-mongo/bin/migrate-mongo.js status",
+    "seed:simple": "cross-env LIGHTSHIP_RANDOM_PORT=true node --loader esm-module-alias/loader --no-warnings seeds/simple-seed.js",
+    "seed:simple:prod": "cross-env NODE_ENV=production LIGHTSHIP_RANDOM_PORT=true node --loader esm-module-alias/loader --no-warnings seeds/simple-seed.js"
   },
   "keywords": [],
   "author": "GreenRenge",
@@ -31,6 +29,7 @@
   "dependencies": {
     "@greenrenge/gracefully": "^1.1.0",
     "callsites": "^4.1.0",
+    "esm-module-alias": "^2.1.0",
     "ioredis": "^4.27.10",
     "jaeger-client": "^3.18.1",
     "lodash": "^4.17.21",
@@ -49,6 +48,7 @@
     "eslint": "^8.55.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-mocha": "^10.2.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -60,5 +60,8 @@
     "rimraf": "^5.0.5",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0"
+  },
+  "aliases": {
+    "@": "src"
   }
 }

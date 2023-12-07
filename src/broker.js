@@ -1,8 +1,8 @@
 import { ServiceBroker } from 'moleculer'
-import config from './config.js'
-import actionUndefinedToNullMiddleware from './middlewares/action-undefined-to-null.middleware.js'
-import cacheCleanerMiddleware from './middlewares/cache.cleaner.middleware.js'
-import { moleculerReady } from './utils/gracefully.js'
+import config from '@/config.js'
+import actionUndefinedToNullMiddleware from '@/middlewares/action-undefined-to-null.middleware.js'
+import cacheCleanerMiddleware from '@/middlewares/cache.cleaner.middleware.js'
+import { moleculerReady } from '@/utils/gracefully.js'
 
 const { namespace, transporter, logLevel, requestTimeout, cacher, tracing } = config.moleculer
 
