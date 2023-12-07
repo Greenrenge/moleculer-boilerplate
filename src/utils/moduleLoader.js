@@ -8,6 +8,7 @@ import fromPairs from 'lodash/fromPairs.js'
 // const __dirname = path.dirname(__filename)
 
 function findAllFilePath(dir, files = []) {
+  if (!fs.existsSync(dir)) return files
   const fileNames = fs.readdirSync(dir)
   fileNames.forEach((fileName) => {
     const filePath = path.join(dir, fileName)
