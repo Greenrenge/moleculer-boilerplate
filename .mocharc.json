@@ -1,0 +1,10 @@
+{
+  "extension": [
+    ".test.js"
+  ],
+  "file": [
+    "./test/setup.js"
+  ],
+  "package": "./package.json",
+  "recursive": true
+}
