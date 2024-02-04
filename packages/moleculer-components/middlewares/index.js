@@ -5,9 +5,9 @@ import mongooseObjectIdCallPatchMiddleware from './mongoose-objectid-call-patch.
 import permissionMiddleware from './permission-middleware.js'
 
 export default {
-  cacheCleanerMiddleware,
-  permissionMiddleware,
-  actionReturnUndefinedToNullMiddleware,
-  activityLogDispatchMiddleware,
-  mongooseObjectIdCallPatchMiddleware,
+	cacheCleanerMiddleware,
+	permissionMiddleware,
+	actionReturnUndefinedToNullMiddleware,
+	activityLogDispatchMiddleware,
+	mongooseObjectIdCallPatchMiddleware,
 }

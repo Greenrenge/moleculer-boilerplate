@@ -1,19 +1,21 @@
 {
   "extension": [
-    ".test.js"
+    ".test.ts",
+    ".spec.ts"
   ],
   "file": [
-    "./test/setup.js"
+    "src/test/setup.js"
   ],
   "package": "./package.json",
   "node-option": [
-    "es-module-specifier-resolution=node",
-    "loader=esm-module-alias/loader"
+    "experimental-specifier-resolution=node",
+    "loader=ts-node/esm",
+    "loader=module-alias/register"
   ],
   "spec": [
-    "test/**/*.test.js",
-    "src/**/test/**/*.test.js"
+    "src/**/test/**/*.test.ts",
+    "src/**/test/**/*.spec.ts"
   ],
-  "timeout": "600000",
+  "timeout": "60000",
   "recursive": true
 }

@@ -1,3 +1,4 @@
 {
+	"html.validate.styles": false,
 	"javascript.preferences.importModuleSpecifier": "non-relative"
 }

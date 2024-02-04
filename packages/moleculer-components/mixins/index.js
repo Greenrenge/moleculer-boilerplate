@@ -11,15 +11,15 @@ import strategies from './strategies/index.js'
 import tokenGenerator from './token-generator.mixin.js'
 
 export default {
-  cacheCleaner,
-  cacheCleanerDependency,
-  config,
-  memoize,
-  passport,
-  secureId,
-  strategies,
-  tokenGenerator,
-  authentication,
-  authorizationToMeta,
-  activityLogEmitter,
+	cacheCleaner,
+	cacheCleanerDependency,
+	config,
+	memoize,
+	passport,
+	secureId,
+	strategies,
+	tokenGenerator,
+	authentication,
+	authorizationToMeta,
+	activityLogEmitter,
 }

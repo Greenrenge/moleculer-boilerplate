@@ -1,4 +1,4 @@
-import broker from '@/broker.js'
+import broker from '@/customBroker'
 
 const logger = process.env.REPL ? console : broker.logger
 

@@ -1,4 +1,4 @@
-import createLightship from '@greenrenge/gracefully'
+const createLightship = require('@greenrenge/gracefully')
 
 const { createReadiness } = createLightship.default({ randomPortOnLocal: true })
 

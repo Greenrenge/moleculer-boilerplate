@@ -6,42 +6,6 @@
       "@/*": [
         "src/*"
       ],
-      "@user/*": [
-        "src/user-service/*"
-      ],
-      "@org/*": [
-        "src/organization-service/*"
-      ],
-      "@activity/*": [
-        "src/activity-service/*"
-      ],
-      "@metadata/*": [
-        "src/metadata-service/*"
-      ],
-      "@gateway/*": [
-        "src/gateway-service/*"
-      ],
-      "@gateway-admin/*": [
-        "src/gateway-admin-service/*"
-      ],
-      "@notification/*": [
-        "src/notification-service/*"
-      ],
-      "@video/*": [
-        "src/video-service/*"
-      ],
-      "@coaching/*": [
-        "src/coaching-service/*"
-      ],
-      "@survey/*": [
-        "src/survey-service/*"
-      ],
-      "@group/*": [
-        "src/group-service/*"
-      ],
-      "@cms/*": [
-        "src/cms/*"
-      ],
       "@configs/*": [
         "configs/*"
       ],
@@ -49,7 +13,7 @@
         "packages/*"
       ],
       "@test/*": [
-        "test/*"
+        "src/test/*"
       ],
       "@utils/*": [
         "src/utils/*"
