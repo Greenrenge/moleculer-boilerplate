@@ -1,0 +1,19 @@
+{
+  "extension": [
+    ".test.js"
+  ],
+  "file": [
+    "./test/setup.js"
+  ],
+  "package": "./package.json",
+  "node-option": [
+    "es-module-specifier-resolution=node",
+    "loader=esm-module-alias/loader"
+  ],
+  "spec": [
+    "test/**/*.test.js",
+    "src/**/test/**/*.test.js"
+  ],
+  "timeout": "600000",
+  "recursive": true
+}

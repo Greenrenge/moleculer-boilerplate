@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  mongoset1:
+    image: mongo:7.0.5
+    restart: always
+    container_name: mongoset1
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_REPLICA_SET_NAME=${MONGO_REPLICA_SET_NAME}
+      - MONGO_CL_ADMIN_USERNAME=${MONGO_CL_ADMIN_USERNAME}
+      - MONGO_CL_ADMIN_PASSWORD=${MONGO_CL_ADMIN_PASSWORD}
+      - MONGO_REPLICA_SET_ADDR1=${MONGO_REPLICA_SET_ADDR1}
+      - MONGO_REPLICA_SET_ADDR2=${MONGO_REPLICA_SET_ADDR2}
+      - MONGO_REPLICA_SET_ADDR3=${MONGO_REPLICA_SET_ADDR3}
+    volumes:
+      - mongors-data1:/data/db
+      - ../config/auth/key:/auth/key
+      - ../scripts/user-init.sh:/scripts/user-init.sh
+      - ../scripts/single-init.sh:/scripts/rs-init.sh
+    ports:
+      - 27021:27021
+    networks:
+      - mongors-network
+    # healthcheck:
+    #   test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongosh -p 27021 -u mongosh -p mongosh --quiet) -eq 1
+    #   interval: 10s
+    #   start_period: 30s
+    # command: ['--replSet', 'rs0', '--bind_ip_all']
+    entrypoint:
+      [
+        '/usr/bin/mongod',
+        '--keyFile',
+        '/auth/key',
+        '--bind_ip_all',
+        '--replSet',
+        '${MONGO_REPLICA_SET_NAME}',
+        '--port',
+        '27021',
+      ]
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: 'always'
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_MONGODB_SERVER=mongoset1
+      - ME_CONFIG_MONGODB_PORT=27021
+
+    depends_on:
+      - mongoset1
+    networks:
+      - mongors-network
+
+networks:
+  mongors-network:
+    driver: bridge
+
+volumes:
+  mongors-data1:
+    driver: local

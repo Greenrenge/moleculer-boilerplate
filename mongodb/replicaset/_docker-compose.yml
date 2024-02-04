@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  mongoset1:
+    image: mongo:7.0.5
+    restart: always
+    container_name: mongoset1
+    ports:
+      - '27021:27021'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_REPLICA_SET_NAME=${MONGO_REPLICA_SET_NAME}
+      - MONGO_CL_ADMIN_USERNAME=${MONGO_CL_ADMIN_USERNAME}
+      - MONGO_CL_ADMIN_PASSWORD=${MONGO_CL_ADMIN_PASSWORD}
+      - MONGO_REPLICA_SET_ADDR1=${MONGO_REPLICA_SET_ADDR1}
+      - MONGO_REPLICA_SET_ADDR2=${MONGO_REPLICA_SET_ADDR2}
+      - MONGO_REPLICA_SET_ADDR3=${MONGO_REPLICA_SET_ADDR3}
+    volumes:
+      - mongors-data1:/data/db
+      - ./auth/key:/auth/key
+      - ./scripts/rs-init.sh:/scripts/rs-init.sh
+      - ./scripts/user-init.sh:/scripts/user-init.sh
+    entrypoint:
+      [
+        '/usr/bin/mongod',
+        '--keyFile',
+        '/auth/key',
+        '--bind_ip_all',
+        '--replSet',
+        '${MONGO_REPLICA_SET_NAME}',
+        '--port',
+        '27021',
+      ]
+    links:
+      - mongoset2
+      - mongoset3
+    networks:
+      - mongors-network
+    # extra_hosts:
+    #   - 'mongoset1:${MONGO_REPLICA_SET_ADDR1}'
+    #   - 'mongoset2:${MONGO_REPLICA_SET_ADDR2}'
+    #   - 'mongoset3:${MONGO_REPLICA_SET_ADDR3}'
+
+  mongoset2:
+    image: mongo:7.0.5
+    restart: always
+    container_name: mongoset2
+    ports:
+      - '27022:27022'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongors-data2:/data/db
+      - ./auth/key:/auth/key
+    entrypoint:
+      [
+        '/usr/bin/mongod',
+        '--keyFile',
+        '/auth/key',
+        '--bind_ip_all',
+        '--replSet',
+        '${MONGO_REPLICA_SET_NAME}',
+        '--port',
+        '27022',
+      ]
+    networks:
+      - mongors-network
+    # depends_on:
+    #   - mongoset1
+    # extra_hosts:
+    #   - 'mongoset1:${MONGO_REPLICA_SET_ADDR1}'
+    #   - 'mongoset2:${MONGO_REPLICA_SET_ADDR2}'
+    #   - 'mongoset3:${MONGO_REPLICA_SET_ADDR3}'
+
+  mongoset3:
+    image: mongo:7.0.5
+    restart: always
+    container_name: mongoset3
+    ports:
+      - '27023:27023'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongors-data3:/data/db
+      - ./auth/key:/auth/key
+    entrypoint:
+      [
+        '/usr/bin/mongod',
+        '--keyFile',
+        '/auth/key',
+        '--bind_ip_all',
+        '--replSet',
+        '${MONGO_REPLICA_SET_NAME}',
+        '--port',
+        '27023',
+      ]
+    networks:
+      - mongors-network
+    # depends_on:
+    #   - mongoset2
+    # extra_hosts:
+    #   - 'mongoset1:${MONGO_REPLICA_SET_ADDR1}'
+    #   - 'mongoset2:${MONGO_REPLICA_SET_ADDR2}'
+    #   - 'mongoset3:${MONGO_REPLICA_SET_ADDR3}'
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: 'always'
+    ports:
+      - '8081:8081'
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_MONGODB_SERVER=mongoset1
+      - ME_CONFIG_MONGODB_PORT=27021
+
+    depends_on:
+      - mongoset1
+    networks:
+      - mongors-network
+    # extra_hosts:
+    #   - 'mongoset1:${MONGO_REPLICA_SET_ADDR1}'
+    #   - 'mongoset2:${MONGO_REPLICA_SET_ADDR2}'
+    #   - 'mongoset3:${MONGO_REPLICA_SET_ADDR3}'
+
+networks:
+  mongors-network:
+    driver: bridge
+
+volumes:
+  mongors-data1:
+  mongors-data2:
+  mongors-data3:
