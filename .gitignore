@@ -121,3 +121,6 @@ jspm_packages/
 
 # Don't track transpiled files
 dist/
+
+jwks.json
+private-jwks.json

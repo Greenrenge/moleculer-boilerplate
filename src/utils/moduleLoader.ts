@@ -4,21 +4,6 @@ import callerPath from 'caller-path'
 const importDir = require('directory-import')
 import fromPairs from 'lodash/fromPairs'
 
-function findAllFilePath(dir: string, files: string[] = []) {
-	if (!fs.existsSync(dir)) return files
-	const fileNames = fs.readdirSync(dir)
-	fileNames.forEach((fileName) => {
-		const filePath = path.join(dir, fileName)
-		const stat = fs.statSync(filePath)
-		if (stat.isDirectory()) {
-			findAllFilePath(filePath, files)
-		} else if (stat.isFile()) {
-			files.push(filePath)
-		}
-	})
-	return files
-}
-
 function load<T>(folder: string) {
 	const callPath = callerPath()
 	if (!callPath) throw new Error('callerPath not found')
