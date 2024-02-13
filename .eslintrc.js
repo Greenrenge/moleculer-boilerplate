@@ -110,6 +110,7 @@ module.exports = {
 		// overrides @typescript-eslint/recommended -- '@typescript-eslint/no-unused-vars': 'warn'
 		// https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/src/configs/recommended.ts
 		'@typescript-eslint/no-unused-vars': 'warn',
+		'@typescript-eslint/explicit-module-boundary-types': 'off',
 	},
 	overrides: [
 		{
@@ -125,15 +126,13 @@ module.exports = {
 				'@typescript-eslint/no-unsafe-return': 'off',
 				'@typescript-eslint/restrict-template-expressions': 'off',
 				'@typescript-eslint/unbound-method': 'off',
+				'@typescript-eslint/naming-convention': 'off',
 
 				// force explicit member accessibility modifiers
 				'@typescript-eslint/explicit-member-accessibility': [
 					'error',
 					{ accessibility: 'no-public' },
 				],
-
-				// enforce return types on module boundaries
-				'@typescript-eslint/explicit-module-boundary-types': 'error',
 
 				// allow empty functions
 				'@typescript-eslint/no-empty-function': 'off',
@@ -145,7 +144,8 @@ module.exports = {
 			rules: {
 				// prefer named exports for certain file types
 				'import/prefer-default-export': 'off',
-				'import/no-default-export': 'error',
+				'import/no-default-export': 'off',
+				'@typescript-eslint/naming-convention': 'off',
 			},
 		},
 
@@ -158,6 +158,7 @@ module.exports = {
 			rules: {
 				// allow tests to create multiple classes
 				'max-classes-per-file': 'off',
+				'@typescript-eslint/naming-convention': 'off',
 
 				// allow side effect constructors
 				'no-new': 'off',
@@ -210,6 +211,7 @@ module.exports = {
 			rules: {
 				// allow explicit any in tests
 				'@typescript-eslint/no-explicit-any': 'off',
+				'@typescript-eslint/naming-convention': 'off',
 
 				// allow non-null-assertions
 				'@typescript-eslint/no-non-null-assertion': 'off',
@@ -224,6 +226,7 @@ module.exports = {
 			rules: {
 				// allow requires in config files
 				'@typescript-eslint/no-var-requires': 'off',
+				'@typescript-eslint/naming-convention': 'off',
 			},
 		},
 
@@ -233,7 +236,6 @@ module.exports = {
 				// allow tests to create multiple classes
 				'max-classes-per-file': 'off',
 				'@typescript-eslint/naming-convention': 'off',
-
 				'lines-between-class-members': 'off',
 				'@typescript-eslint/lines-between-class-members': 'off',
 				'@typescript-eslint/member-ordering': 'off',
@@ -250,8 +252,10 @@ module.exports = {
 					['@pkg', './packages'],
 					['@test', './test'],
 					['@utils', './src/utils'],
+					['@auth', './src/services/auth'],
+					['@upload', './src/services/upload'],
 				],
-				extensions: ['.js', '.jsx', '.json'],
+				extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
 			},
 		},
 	},

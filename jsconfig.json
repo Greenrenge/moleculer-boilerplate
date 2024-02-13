@@ -20,7 +20,10 @@
       ],
       "@auth/*": [
         "src/services/auth/*"
-      ]
+      ],
+      "@upload/*": [
+        "src/services/upload/*"
+      ],
     }
   },
 }

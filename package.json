@@ -35,7 +35,10 @@
     "@casl/mongoose": "^7.2.1",
     "@greenrenge/gracefully": "^1.1.0",
     "@meanie/mongoose-upsert-many": "^2.2.0",
+    "aws-sdk": "^2.1556.0",
+    "axios": "^1.6.7",
     "base62": "^2.0.1",
+    "bcrypt": "^5.1.1",
     "caller-path": "^3.0.1",
     "directory-import": "^2.3.0",
     "extract-files": "^11.0.0",
@@ -58,10 +61,12 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.3.1",
+    "@types/bcrypt": "^5.0.2",
     "@types/chai": "^4.3.11",
     "@types/chai-as-promised": "^7.1.8",
     "@types/factory-girl": "^5.0.12",
     "@types/jest": "^29.2.3",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.6",
     "@types/node": "^18.11.9",
@@ -109,7 +114,8 @@
     "@configs": "configs",
     "@pkg": "packages",
     "@utils": "src/utils",
-    "@auth": "src/services/auth"
+    "@auth": "src/services/auth",
+    "@upload": "src/services/upload"
   },
   "packageManager": "pnpm@8.14.1",
   "pnpm": {
