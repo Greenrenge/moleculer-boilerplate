@@ -3,10 +3,10 @@
 import cookie from 'cookie'
 import _ from 'lodash'
 import passport from 'passport'
-import fbStrategy from './strategies/facebook.strategy.mixin.js'
-import githubStrategy from './strategies/github.strategy.mixin.js'
-import googleStrategy from './strategies/google.strategy.mixin.js'
-import twitterStrategy from './strategies/twitter.strategy.mixin.js'
+import fbStrategy from './strategies/facebook.strategy.mixin'
+import githubStrategy from './strategies/github.strategy.mixin'
+import googleStrategy from './strategies/google.strategy.mixin'
+import twitterStrategy from './strategies/twitter.strategy.mixin'
 
 const strategies = {
 	facebook: fbStrategy,

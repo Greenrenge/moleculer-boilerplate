@@ -43,10 +43,13 @@
         "src/utils/*"
       ],
       "@auth/*": [
-        "src/services/auth/*"
+        "src/services/auth-service/*"
       ],
       "@upload/*": [
-        "src/services/upload/*"
+        "src/services/upload-service/*"
+      ],
+      "@org/*": [
+        "src/services/org-service/*"
       ],
     }, /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */

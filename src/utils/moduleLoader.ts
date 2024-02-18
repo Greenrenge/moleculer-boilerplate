@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import fs from 'fs'
 import path from 'path'
 import callerPath from 'caller-path'
-const importDir = require('directory-import')
+// @ts-ignore
+import importDir from 'directory-import'
 import fromPairs from 'lodash/fromPairs'
+
+// const importDir = require('directory-import')
 
 function load<T>(folder: string) {
 	const callPath = callerPath()

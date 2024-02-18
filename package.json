@@ -10,8 +10,8 @@
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
-    "dev": "ts-node -r module-alias/register ./node_modules/moleculer/bin/moleculer-runner.js --hot src/services/*.service.ts src/services/**/*.service.ts",
-    "dev:repl": "ts-node -r module-alias/register ./node_modules/moleculer/bin/moleculer-runner.js --repl --hot src/services/*.service.ts src/services/**/*.service.ts",
+    "dev": "ts-node -r module-alias/register ./node_modules/moleculer/bin/moleculer-runner.js --hot src/services/*.service.ts src/services/**/*.service.ts src/services/*.service.js src/services/**/*.service.js",
+    "dev:repl": "ts-node -r module-alias/register ./node_modules/moleculer/bin/moleculer-runner.js --repl --hot src/services/*.service.ts src/services/**/*.service.ts src/services/*.service.js src/services/**/*.service.js",
     "start": "moleculer-runner --config dist/moleculer.config.js",
     "test:types": "concurrently npm:prettier npm:lint npm:typecheck",
     "typecheck": "tsc --noEmit && echo \"tsc: no typecheck errors\"",
@@ -40,7 +40,9 @@
     "base62": "^2.0.1",
     "bcrypt": "^5.1.1",
     "caller-path": "^3.0.1",
-    "directory-import": "^2.3.0",
+    "cookie": "^0.6.0",
+    "directory-import": "^2.3.1",
+    "dot-object": "^2.1.4",
     "extract-files": "^11.0.0",
     "fastest-validator": "^1.17.0",
     "ioredis": "^4.27.10",
@@ -48,6 +50,7 @@
     "jose": "^5.2.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "luxon": "^3.4.4",
     "moleculer": "^0.14.32",
     "moleculer-apollo-server": "^0.3.8",
     "moleculer-repl": "^0.7.4",
@@ -57,7 +60,8 @@
     "mongoose": "^8.0.2",
     "mongoose-aggregate-paginate-v2": "^1.0.7",
     "mongoose-mpath": "^3.0.2",
-    "nats": "^1.4.12"
+    "nats": "^1.4.12",
+    "passport": "^0.7.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.3.1",
@@ -114,8 +118,9 @@
     "@configs": "configs",
     "@pkg": "packages",
     "@utils": "src/utils",
-    "@auth": "src/services/auth",
-    "@upload": "src/services/upload"
+    "@auth": "src/services/auth-service",
+    "@upload": "src/services/upload-service",
+    "@org": "src/services/org-service"
   },
   "packageManager": "pnpm@8.14.1",
   "pnpm": {

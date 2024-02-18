@@ -19,10 +19,13 @@
         "src/utils/*"
       ],
       "@auth/*": [
-        "src/services/auth/*"
+        "src/services/auth-service/*"
       ],
       "@upload/*": [
-        "src/services/upload/*"
+        "src/services/upload-service/*"
+      ],
+      "@org/*": [
+        "src/services/org-service/*"
       ],
     }
   },

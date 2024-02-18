@@ -1,4 +1,4 @@
-import config from './src/config.js'
+import config from './src/config'
 
 const { host, port, user, password, replicaSet, database } = config.mongodb
 
@@ -17,7 +17,7 @@ const migrationConfig = {
 	},
 	migrationsDir: 'migrations',
 	changelogCollectionName: 'migrations',
-	migrationFileExtension: '.js',
+	migrationFileExtension: '',
 }
 
 export default migrationConfig

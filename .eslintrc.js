@@ -71,7 +71,7 @@ module.exports = {
 
 		// set up naming convention rules
 		'@typescript-eslint/naming-convention': [
-			'error',
+			'off',
 			// camelCase for everything not otherwise indicated
 			{ selector: 'default', format: ['camelCase'] },
 			// allow known default exclusions
@@ -127,7 +127,6 @@ module.exports = {
 				'@typescript-eslint/restrict-template-expressions': 'off',
 				'@typescript-eslint/unbound-method': 'off',
 				'@typescript-eslint/naming-convention': 'off',
-
 				// force explicit member accessibility modifiers
 				'@typescript-eslint/explicit-member-accessibility': [
 					'error',
@@ -252,8 +251,9 @@ module.exports = {
 					['@pkg', './packages'],
 					['@test', './test'],
 					['@utils', './src/utils'],
-					['@auth', './src/services/auth'],
-					['@upload', './src/services/upload'],
+					['@auth', './src/services/auth-service'],
+					['@upload', './src/services/upload-service'],
+					['@org', './src/services/org-service'],
 				],
 				extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
 			},

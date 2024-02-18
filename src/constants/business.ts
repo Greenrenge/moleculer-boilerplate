@@ -6,19 +6,6 @@ export enum LoginMethod {
 	APPLE = 'apple',
 }
 
-export enum Privacy {
-	PUBLIC = 'public',
-	PRIVATE = 'private',
-	FRIEND_ONLY = 'friend_only',
-	FRIEND_OF_FRIEND = 'friend_of_friend',
-}
-export enum FeedbackScope {
-	ORGANIZATION = 'organization',
-	DEPARTMENT = 'department',
-	REPORT_TO = 'report_to',
-	CUSTOM = 'custom',
-}
-
 export enum PublicOrg {
 	PUBLIC_ORG = 'public',
 }
@@ -50,13 +37,6 @@ export enum SurveyKinds {
 
 export enum RecommendKinds {
 	VIDEO = 'recommend_video',
-}
-
-export enum MobileAppPermissions {
-	CREATE_APP_SURVEY = 'create_app_survey',
-	CREATE_APP_ANNOUNCEMENT = 'create_app_announcement',
-	CREATE_ORG_SURVEY = 'create_org_survey',
-	CREATE_ORG_ANNOUNCEMENT = 'create_org_announcement',
 }
 
 export enum NotificationTypes {

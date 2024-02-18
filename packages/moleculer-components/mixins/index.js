@@ -1,14 +1,15 @@
-import activityLogEmitter from './activity-log-emitter.mixin.js'
-import authentication from './authentication.mixin.js'
-import authorizationToMeta from './authorization-to-meta.mixin.js'
-import cacheCleanerDependency from './cache.cleaner.dependency.mixin.js'
-import cacheCleaner from './cache.cleaner.mixin.js'
-import config from './config.mixin.js'
-import memoize from './memoize.mixin.js'
-import passport from './passport.mixin.js'
-import secureId from './secure-id.mixin.js'
-import strategies from './strategies/index.js'
-import tokenGenerator from './token-generator.mixin.js'
+import activityLogEmitter from './activity-log-emitter.mixin'
+import authentication from './authentication.mixin'
+import authorizationToMeta from './authorization-to-meta.mixin'
+import cacheCleanerDependency from './cache.cleaner.dependency.mixin'
+import cacheCleaner from './cache.cleaner.mixin'
+import config from './config.mixin'
+import memoize from './memoize.mixin'
+import authMixin from './meta-auth.mixin'
+import passport from './passport.mixin'
+import secureId from './secure-id.mixin'
+import strategies from './strategies/index'
+import tokenGenerator from './token-generator.mixin'
 
 export default {
 	cacheCleaner,
@@ -22,4 +23,5 @@ export default {
 	authentication,
 	authorizationToMeta,
 	activityLogEmitter,
+	authMixin,
 }

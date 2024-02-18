@@ -1,4 +1,4 @@
-import fromPairs from 'lodash/fromPairs.js'
+import fromPairs from 'lodash/fromPairs'
 
 export default (...paths) => ({
 	hooks: {

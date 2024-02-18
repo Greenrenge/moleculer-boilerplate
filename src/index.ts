@@ -1,12 +1,17 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import '@/mongodb'
 
 import type { ServiceSchema } from 'moleculer'
 import rootBroker, { createBroker } from '@/customBroker'
-import helloWorldService from '@/services/helloWorld.service'
+import AuthService from '@auth/auth.service'
+import * as OrgService from '@org/index'
+import UploadService from '@/services/upload-service/upload.service'
 
 // Register Service
 const allBrokers = [rootBroker]
-const rootBrokerServices = [helloWorldService]
+const rootBrokerServices = [AuthService, OrgService, UploadService]
 
 const allServices: ServiceSchema[] = []
 
@@ -34,7 +39,9 @@ for (const srv of allServices) {
 }
 
 for (const service of rootBrokerServices) {
+	// @ts-ignore
 	console.log(`Register service ${service.name} to root broker`)
+	// @ts-ignore
 	rootBroker.createService(service)
 }
 for (const broker of allBrokers) {

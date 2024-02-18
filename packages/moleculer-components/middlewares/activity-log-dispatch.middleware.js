@@ -1,5 +1,5 @@
 import ld from 'lodash'
-import * as mxn from '../mixins/activity-log-emitter.mixin.js'
+import * as mxn from '../mixins/activity-log-emitter.mixin'
 
 const { isString, isArray, isFunction } = ld
 

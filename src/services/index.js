@@ -1,2 +1,3 @@
-export { default as AuthService } from './auth/auth.service'
-export { default as UploadService } from './upload/index'
+export { default as AuthService } from './auth-service/auth.service'
+export { default as UploadService } from './upload-service/upload.service'
+export * from './org-service'

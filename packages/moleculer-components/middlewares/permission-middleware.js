@@ -67,9 +67,6 @@ export default {
 				const ability = new Ability(ctx.meta.permissions ? unpackRules(ctx.meta.permissions) : [])
 
 				ctx.locals.permission = ability
-				ctx.locals.memberViewPermission = !!(
-					ctx.meta.__origin_gateway_admin && ability.can('view', 'org_member')
-				)
 
 				if (permissions) {
 					const permissionChecker = createPermissionChecker(ctx, ability)

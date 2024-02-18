@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import type { BrokerOptions, MetricRegistry, ServiceBroker } from 'moleculer'
 import { Errors } from 'moleculer'
 import actionUndefinedToNullMiddleware from '@pkg/moleculer-components/middlewares/action-undefined-to-null.middleware'
