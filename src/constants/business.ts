@@ -10,6 +10,8 @@ export enum PublicOrg {
 	PUBLIC_ORG = 'public',
 }
 
+export const { PUBLIC_ORG } = PublicOrg
+
 export enum Gender {
 	MALE = 'M',
 	FEMALE = 'F',

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import config from '@/config'
-import { Gender, PublicOrg } from '@/constants/business'
+import { Gender, PUBLIC_ORG } from '@/constants/business'
 import { schemaOption } from '@/models/common/index'
 import { randomPrivateCode } from '@utils/random'
 
@@ -91,7 +91,7 @@ const EmployeeSchema = new mongoose.Schema(
 		orgId: {
 			type: String,
 			required: true,
-			default: PublicOrg.PUBLIC_ORG,
+			default: PUBLIC_ORG,
 		},
 		deptId: mongoose.Types.ObjectId,
 		jobId: mongoose.Types.ObjectId,
