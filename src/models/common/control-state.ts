@@ -1,7 +1,7 @@
 import base62 from 'base62'
 import type { Document, Model } from 'mongoose'
 import mongoose from 'mongoose'
-import { schemaOption } from '@/models/common/index.js'
+import { schemaOption } from '@/models/common'
 
 export interface ControlStateDocument extends Document {
 	last: number

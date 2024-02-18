@@ -1,5 +1,3 @@
-import { SchemaOptions } from 'mongoose'
-
 export const schemaOption = {
 	strictPopulate: false,
 	timestamps: true,
