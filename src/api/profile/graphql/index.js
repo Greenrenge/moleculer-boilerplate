@@ -33,7 +33,7 @@ export const type = gql`
 		integration: Integration
 		consentAnalytics: Boolean
 		isPersonalProfile: Boolean
-		connectedAt: String
+		connectedAt: Date
 
 		# EMPLOYEE
 		userId: ID
@@ -43,9 +43,9 @@ export const type = gql`
 		roleId: String
 		reportTo: String
 		privateCode: String
-		privateCodeExpiredAt: String
+		privateCodeExpiredAt: Date
 		active: Boolean
-		hiredAt: String
+		hiredAt: Date
 		maritalStatus: MaritalStatus
 		numberOfChildren: Int
 
@@ -60,9 +60,9 @@ export const type = gql`
 		supervisor: User
 		underling(deptId: String): UserPagination
 
-		lastInvitedAt: String
-		createdAt: String
-		updatedAt: String
+		lastInvitedAt: Date
+		createdAt: Date
+		updatedAt: Date
 	}
 
 	extend type User {
@@ -76,7 +76,7 @@ export const type = gql`
 	type IntegrationItem {
 		userId: String
 		email: String
-		integratedAt: String
+		integratedAt: Date
 	}
 
 	type Integration {

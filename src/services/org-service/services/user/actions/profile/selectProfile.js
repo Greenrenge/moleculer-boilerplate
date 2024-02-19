@@ -1,7 +1,7 @@
 import ld from 'lodash'
 import { Errors } from 'moleculer'
 import { PUBLIC_ORG } from '@/constants/business'
-import { ERRORS } from '@/constants/errors'
+import { USER_ERRORS } from '@/constants/errors'
 import { Employee } from '@org/models/employee'
 
 const { find } = ld
@@ -18,9 +18,9 @@ async function selectProfile(ctx) {
 	const user = await Employee.findById(userId)
 	if (!user)
 		throw new Errors.MoleculerClientError(
-			ERRORS.USER_NOT_EXIST.MESSAGE,
+			USER_ERRORS.USER_NOT_EXIST.MESSAGE,
 			400,
-			ERRORS.USER_NOT_EXIST.CODE,
+			USER_ERRORS.USER_NOT_EXIST.MESSAGE,
 		)
 
 	const fetchPermissions = async (roleId) => {

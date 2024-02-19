@@ -1,3 +1,4 @@
+import { ADMIN_USER_ID } from '@/constants/business'
 import { fetchAbility } from '@org/models/abilityBuilder'
 import { Employee } from '@org/models/employee'
 
@@ -22,7 +23,7 @@ export default {
 		}).accessibleBy(await fetchAbility({ userId, empId, ctx }))
 
 		const isFetchSelf = [empId, userId].includes(id) || doc?.userId === userId
-		const isAdminImpersonate = isFetchSelf && userId === '__admin' // for impersonation
+		const isAdminImpersonate = isFetchSelf && userId === ADMIN_USER_ID // for impersonation
 		const obj = await doc?.toObject()
 		this.logger.info('obj', obj)
 		return obj ? { ...obj, ...(isAdminImpersonate && { orgId: ctx.meta.orgId }) } : obj

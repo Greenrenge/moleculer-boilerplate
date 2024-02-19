@@ -13,8 +13,8 @@ export const GroupDefs = gql`
 		desc: String
 		image: String
 		type: GroupType!
-		createdAt: String
-		updatedAt: String
+		createdAt: Date
+		updatedAt: Date
 		orgId: String
 		empId: String
 

@@ -1,6 +1,6 @@
 import flattenDeep from 'lodash/flattenDeep'
 import mongoose from 'mongoose'
-import { PermActions, PermSubjects } from '@/constants/business'
+import { ADMIN_USER_ID, PermActions, PermSubjects } from '@/constants/business'
 import { Permission } from '@org/models/permission'
 import { Role } from '@org/models/role'
 import load from '@utils/moduleLoader'
@@ -20,7 +20,7 @@ export default {
 			/** @param {import('moleculer').Context} ctx */
 			async handler(ctx) {
 				const { userId, roleId } = ctx.meta
-				if (userId === '__admin' && ctx.params.id?.toString() === roleId?.toString()) {
+				if (userId === ADMIN_USER_ID && ctx.params.id?.toString() === roleId?.toString()) {
 					// super admin
 					return flattenDeep(
 						Object.values(PermSubjects).map((subject) =>

@@ -1,5 +1,5 @@
 import { Errors } from 'moleculer'
-import { ERRORS } from '@/constants/errors'
+import { USER_ERRORS } from '@/constants/errors'
 import { Employee, getProfileImagePath } from '@org/models/employee'
 import { JobPosition } from '@org/models/job-position'
 
@@ -52,9 +52,9 @@ export default {
 			const job = await JobPosition.findById(jobId)
 			if (!job) {
 				throw new Errors.MoleculerClientError(
-					ERRORS.JOB_NOT_FOUND.MESSAGE,
+					USER_ERRORS.JOB_NOT_FOUND.MESSAGE,
 					404,
-					ERRORS.JOB_NOT_FOUND.CODE,
+					USER_ERRORS.JOB_NOT_FOUND.CODE,
 				)
 			}
 		}
@@ -79,9 +79,9 @@ export default {
 		)
 		if (!updatedUser) {
 			throw new Errors.MoleculerClientError(
-				ERRORS.USER_NOT_FOUND.MESSAGE,
+				USER_ERRORS.USER_NOT_FOUND.MESSAGE,
 				404,
-				ERRORS.USER_NOT_FOUND.CODE,
+				USER_ERRORS.USER_NOT_FOUND.CODE,
 			)
 		}
 		ctx.broker.emit('user.profile.update', updatedUser, { meta: ctx.meta })

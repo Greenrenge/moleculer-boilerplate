@@ -8,6 +8,7 @@ import { Errors } from 'moleculer'
 // 		MESSAGE: ErrorMessage
 // 	}>
 // }>
+
 export const ERRORS = {
 	FILE_NOT_FOUND: {
 		CODE: 'file_not_found',

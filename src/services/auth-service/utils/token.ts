@@ -5,21 +5,29 @@ import config from '@/config'
 import { ValidationError } from '@/constants/errors'
 
 const JWKS = jose.createLocalJWKSet(config.jwt.jwks)
-
 /**
  * Generate a JWT token from user entity.
  */
-const generateToken = (payload: any): Promise<string> =>
-	new jose.SignJWT({
+const alg = 'RS256'
+let privatekey: any
+
+function loadPrivateKey() {
+	return jose.importJWK(config.jwt.signingKey, alg)
+}
+
+const generateToken = async (payload: any): Promise<string> => {
+	privatekey = privatekey || (await loadPrivateKey())
+	return new jose.SignJWT({
 		...payload,
 	})
-		.setProtectedHeader({ alg: 'RS256' })
+		.setProtectedHeader({ alg })
 		.setIssuedAt()
 		.setIssuer(config.jwt.issuer)
 		.setAudience(config.jwt.audience)
 		.setExpirationTime(config.jwt.expiresIn)
 		.setSubject(payload?._id)
-		.sign(config.jwt.signingKey)
+		.sign(privatekey)
+}
 
 export const generateRandomToken = (): string => {
 	const buffer = randomBytes(256)

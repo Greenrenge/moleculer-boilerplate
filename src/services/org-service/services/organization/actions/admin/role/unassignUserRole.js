@@ -1,4 +1,4 @@
-import { PermActions, PermSubjects } from '@/constants/business'
+import { ADMIN_USER_ID, PermActions, PermSubjects } from '@/constants/business'
 import { Employee } from '@org/models/employee'
 /**
  * @typedef {import('moleculer').ServiceBroker} ServiceBroker
@@ -24,7 +24,7 @@ export default {
 	async handler(ctx) {
 		const { userId } = ctx.params
 		const { orgId } = ctx.meta
-		if (userId === '__admin') return null
+		if (userId === ADMIN_USER_ID) return null
 		const user = await Employee.findOneAndUpdate(
 			{
 				_id: userId,

@@ -1,0 +1,7 @@
+# Write your query or mutation here
+mutation {
+	register(email: "greenrenge@gmail.com", password: "11111111") {
+		access_token
+		token_type
+	}
+}

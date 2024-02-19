@@ -1,3 +1,4 @@
+import { create } from 'lodash'
 import type { ActionSchema } from 'moleculer'
 import type { AppContextMeta } from '@/common-types'
 import { LoginMethod } from '@/constants/business'
@@ -80,14 +81,20 @@ export default {
 		const createdAuthUser = await newAuthUser.save()
 
 		const userInfo = { _id, email, ...rest }
+		let userPublicProfile: any
+		try {
+			userPublicProfile = await this.broker.call('v1.user.create', userInfo, {
+				meta: {
+					...ctx.meta,
+					userId: _id,
+				},
+			})
+		} catch (e) {
+			this.logger.error('Error when creating user profile', e)
+			await createdAuthUser.deleteOne()
+			throw e
+		}
 
-		// create public profile
-		const userPublicProfile = await this.broker.call('v1.user.create', userInfo, {
-			meta: {
-				...ctx.meta,
-				userId: _id,
-			},
-		})
 		const token = await issueUserAccessToken(userPublicProfile, {
 			empId: userPublicProfile._id,
 			permission: [],

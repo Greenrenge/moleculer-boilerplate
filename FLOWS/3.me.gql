@@ -1,0 +1,22 @@
+query {
+	me {
+		id
+		email
+		firstName
+		lastName
+		displayName
+		createdAt
+		nickName
+		fullName
+		image
+		gender
+		phoneNumber
+		dateOfBirth
+		language
+		integration {
+			facebook {
+				userId
+			}
+		}
+	}
+}
