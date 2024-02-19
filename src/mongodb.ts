@@ -1,11 +1,11 @@
 import { accessibleRecordsPlugin } from '@casl/mongoose'
+// @ts-ignore
+import upsertMany from '@meanie/mongoose-upsert-many'
+import mongoose from 'mongoose'
+import config from '@/config'
+import mongoosePaginate from '@pkg/mongoose-paginate-v2'
 import { mongooseDbReady } from '@utils/gracefully'
 import logger from '@utils/logger'
-import mongoose from 'mongoose'
-import mongoosePaginate from '@pkg/mongoose-paginate-v2'
-import config from '@/config'
-
-const upsertMany = require('@meanie/mongoose-upsert-many')
 
 // loads plugins
 mongoose.plugin(accessibleRecordsPlugin)

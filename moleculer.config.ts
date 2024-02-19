@@ -6,6 +6,7 @@ import cacheCleanerMiddleware from '@pkg/moleculer-components/middlewares/cache.
 import permissionMiddleware from '@pkg/moleculer-components/middlewares/permission-middleware'
 import config from './src/config'
 import { moleculerReady } from './src/utils/gracefully'
+import '@/mongodb'
 
 const { namespace, transporter, logLevel, requestTimeout, cacher } = config.moleculer
 /**
@@ -37,7 +38,8 @@ const brokerConfig: BrokerOptions = {
 	// Namespace of nodes to segment your nodes on the same network.
 	namespace,
 	// Unique node identifier. Must be unique in a namespace.
-	nodeID: null,
+	// nodeID: null,
+
 	// Custom metadata store. Store here what you want. Accessing: `this.broker.metadata`
 	metadata: {},
 
@@ -156,7 +158,10 @@ const brokerConfig: BrokerOptions = {
 	// Enable action & event parameter validation. More info: https://moleculer.services/docs/0.14/validating.html
 	validator: true,
 
-	errorHandler: null,
+	// errorHandler: null,
+	errorHandler(err) {
+		throw err
+	},
 
 	// Enable/disable built-in metrics function. More info: https://moleculer.services/docs/0.14/metrics.html
 	metrics: {

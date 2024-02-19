@@ -31,7 +31,7 @@ function load<T>(folder: string) {
 					.map(
 						([k, v]: any) =>
 							v.default && [
-								k.replace('/', '').replace('.ts', '').replace('.ts', '').replace(/\//g, '.'),
+								k.replace('/', '').replace('.ts', '').replace('.js', '').replace(/\//g, '.'),
 								v.default,
 							],
 					)

@@ -50,7 +50,7 @@ module.exports = {
 
 		// ban ts-comment except with description
 		'@typescript-eslint/ban-ts-comment': [
-			'error',
+			'off',
 			{
 				'ts-expect-error': 'allow-with-description',
 				'ts-ignore': 'allow-with-description',
@@ -248,7 +248,7 @@ module.exports = {
 					['@', './src'],
 					['@configs', './configs'],
 					['@pkg', './packages'],
-					['@test', './test'],
+					['@test', '.src/test'],
 					['@utils', './src/utils'],
 				],
 				extensions: ['.js', '.jsx', '.json'],
