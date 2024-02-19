@@ -44,6 +44,7 @@ export default {
 		const { registerType = LoginMethod.EMAIL, asEmployee } = ctx.params
 
 		const entity = await this.verifyUserInfo(ctx.params)
+
 		const user = await UserLogin.findOne(this.getUserFilterQuery(entity, registerType))
 
 		if (user) {

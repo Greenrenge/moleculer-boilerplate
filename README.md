@@ -1,4 +1,8 @@
-# README #
+# Research
+
+https://www.apollographql.com/tutorials/voyage-part1/01-intro-to-federation
+
+# README
 
 ## Getting started
 
@@ -48,7 +52,6 @@ use `npm run migrate:up` to run all pending database migrations
 ```
 npm run migrate:up [options]
 ```
-
 
 use `npm run migrate:down` to undo the last applied database migration
 

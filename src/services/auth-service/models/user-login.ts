@@ -103,4 +103,8 @@ UserLoginSchema.pre('save', async function (next) {
 	}
 })
 
-export const UserLogin = mongoose.model<UserLoginDocument>('UserLogin', UserLoginSchema)
+export const UserLogin = mongoose.model<UserLoginDocument>(
+	'UserLogin',
+	UserLoginSchema,
+	'user_login',
+)

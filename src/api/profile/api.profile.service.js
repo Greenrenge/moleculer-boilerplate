@@ -11,7 +11,7 @@ import {
 } from '../__common_resolvers'
 import { overrideEmployeeProfile } from './__override-profile'
 import { type as gqlType } from './graphql'
-// import { MOBILE_APP_PERMISSIONS } from '@/constants/business.js'
+// import { MOBILE_APP_PERMISSIONS } from '@/constants/business
 
 const { moleculerGql: gql } = pkg
 

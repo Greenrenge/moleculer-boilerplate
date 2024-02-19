@@ -5,9 +5,9 @@ import '@/mongodb'
 
 import type { ServiceSchema } from 'moleculer'
 import rootBroker, { createBroker } from '@/customBroker'
+import UploadService from '@/services/upload-service/upload.service'
 import AuthService from '@auth/auth.service'
 import * as OrgService from '@org/index'
-import UploadService from '@/services/upload-service/upload.service'
 
 // Register Service
 const allBrokers = [rootBroker]
