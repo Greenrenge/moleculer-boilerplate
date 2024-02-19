@@ -1,5 +1,5 @@
 import ld from 'lodash'
-import * as mxn from '../mixins/activity-log-emitter.mixin.js'
+import mxn from '../mixins/activity-log-emitter.mixin'
 
 const { isString, isArray, isFunction } = ld
 
@@ -20,7 +20,7 @@ export default {
 			const eventName = action.trackActivity
 			return async function activityDispatcher(ctx) {
 				const res = await handler(ctx)
-				mxn.emitActivityLog({
+				mxn.methods.emitActivityLog({
 					emitEventName: trackActivityEmitName,
 					eventName,
 					ctx,
@@ -34,7 +34,7 @@ export default {
 			const eventName = action.trackActivity[0]
 			return async function activityDispatcherOutlet(ctx) {
 				const res = await handler(ctx)
-				mxn.emitActivityLog({
+				mxn.methods.emitActivityLog({
 					emitEventName: trackActivityEmitName,
 					eventName,
 					ctx,
