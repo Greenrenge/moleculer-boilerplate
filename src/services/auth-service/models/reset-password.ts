@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import { schemaOption } from '@/models/common/index'
 import { randomCode } from '@/utils/random'
 
-interface ResetPasswordDocument extends Document {
+interface ResetPasswordDocument extends Document<Types.ObjectId> {
 	userId: string
 	email: string
 	code: string

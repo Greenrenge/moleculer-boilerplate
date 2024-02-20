@@ -1,18 +1,13 @@
-import type { RawRule } from '@casl/ability'
 import { packRules } from '@casl/ability/extra'
 import type { ServiceBroker } from 'moleculer'
+import type {
+	IssueUserAccessTokenParams,
+	IssueUserAccessTokenReturn,
+} from 'v1.auth.issueUserAccessToken'
 import type { AppContextMeta } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import { UserLogin } from '@/services/auth-service/models/user-login'
 import { issueUserAccessToken } from '../utils/token'
-
-type IssueUserAccessTokenParams = {
-	userId: string
-	empId: string
-	roleId?: string
-	permissions?: RawRule<any, any>[]
-	orgId: string
-}
 
 export default {
 	params: {
@@ -32,7 +27,7 @@ export default {
 	async handler(
 		this: ServiceBroker,
 		ctx: AppContextMeta<IssueUserAccessTokenParams>,
-	): Promise<any> {
+	): IssueUserAccessTokenReturn {
 		const { empId, orgId, roleId, permissions: _permissions = [] } = ctx.params
 
 		const user = await UserLogin.findById(ctx.params.userId)

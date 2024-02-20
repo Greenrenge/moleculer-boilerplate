@@ -64,7 +64,7 @@ module.exports = {
 			'error',
 			{ fixMixedExportsWithInlineTypeSpecifier: true },
 		],
-		'@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+		'@typescript-eslint/consistent-type-imports': ['off', { prefer: 'type-imports' }],
 
 		// enforce consistent order of class members
 		'@typescript-eslint/member-ordering': 'error',

@@ -1,7 +1,18 @@
-import mongoose from 'mongoose'
+import mongoose, { Document, Schema, Types } from 'mongoose'
 import { schemaOption } from '@/models/common/index'
 
-const PermissionsSchema = new mongoose.Schema(
+export interface PermissionsDocument extends Document<string> {
+	inheritance: boolean
+}
+
+export interface RoleDocument extends Document<Types.ObjectId> {
+	orgId: string
+	name: string
+	permissions: PermissionsDocument[]
+	isDefaultRole: boolean
+}
+
+const PermissionsSchema = new Schema<Permissions>(
 	{
 		_id: {
 			type: String,
@@ -16,11 +27,7 @@ const PermissionsSchema = new mongoose.Schema(
 	{ ...schemaOption, timestamps: false },
 )
 
-/**
- * @typedef {import('mongoose').Model} Model
- */
-
-const RoleSchema = new mongoose.Schema(
+const RoleSchema = new Schema<RoleDocument>(
 	{
 		orgId: {
 			type: String,
@@ -42,4 +49,4 @@ const RoleSchema = new mongoose.Schema(
 	schemaOption,
 )
 
-export const Role = mongoose.model('Role', RoleSchema)
+export const Role = mongoose.model<RoleDocument>('Role', RoleSchema)

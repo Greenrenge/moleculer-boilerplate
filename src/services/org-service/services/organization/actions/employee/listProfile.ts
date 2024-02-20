@@ -1,15 +1,12 @@
-/**
- * @typedef {import('moleculer').ServiceBroker} ServiceBroker
- * @typedef {import('moleculer').Context} Context
- * @typedef {import('mongoose').Model} Model
- */
-import { Employee } from '@org/models/employee'
+import { ListProfileParams, ListProfileReturn } from 'v1.organization.employee.listProfile'
+import { AppContextMeta } from '@/common-types'
+import { Employee, EmployeeDocument } from '@org/models/employee'
 
 export default {
-	/** @param {Context} ctx */
-	async handler(ctx) {
+	async handler(ctx: AppContextMeta<ListProfileParams>): ListProfileReturn {
 		const { userId } = ctx.meta
 		if (!userId) return []
+
 		const [organizationProfiles, publicProfile] = await Promise.all([
 			Employee.find({
 				userId,
@@ -17,8 +14,9 @@ export default {
 			}),
 			Employee.findById(userId),
 		])
+
 		return [publicProfile, ...organizationProfiles]
 			.filter((a) => !!a) // prevent not found publicProfile
-			.map((a) => a?.toObject())
+			.map((a) => a?.toObject() as EmployeeDocument)
 	},
 }

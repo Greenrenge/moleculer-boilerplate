@@ -1,11 +1,12 @@
-import { create } from 'lodash'
 import type { ActionSchema } from 'moleculer'
+import { IToken } from 'v1.auth.issueUserAccessToken'
+import { RegisterParams, RegisterReturn } from 'v1.auth.register'
+import { SelectProfileParams, SelectProfileReturn } from 'v1.user.profile.selectProfile'
 import type { AppContextMeta } from '@/common-types'
 import { LoginMethod } from '@/constants/business'
 import { ValidationError } from '@/constants/errors'
 import { ControlState } from '@/models/common/control-state'
 import { UserLogin } from '@/services/auth-service/models/user-login'
-import type { IToken } from '@/services/auth-service/utils/token'
 import { issueUserAccessToken } from '@/services/auth-service/utils/token'
 
 const _isRequiredPassword = (registerType: LoginMethod): boolean => {
@@ -19,13 +20,7 @@ const _isRequiredPassword = (registerType: LoginMethod): boolean => {
 			return true
 	}
 }
-export type RegisterParams = {
-	email?: string
-	password?: string
-	registerType?: LoginMethod
-	accessToken?: string
-	asEmployee: boolean | string
-}
+
 export default {
 	params: {
 		email: { type: 'string', optional: true },
@@ -40,7 +35,7 @@ export default {
 		},
 	},
 
-	handler: async function register(ctx: AppContextMeta<RegisterParams>): Promise<IToken> {
+	handler: async function register(ctx: AppContextMeta<RegisterParams>): RegisterReturn {
 		// this.logger.info(`ACTION: ${ctx.action.name}`, ctx)
 		const { registerType = LoginMethod.EMAIL, asEmployee } = ctx.params
 
@@ -53,12 +48,11 @@ export default {
 			if (registerType === LoginMethod.EMAIL) {
 				throw new ValidationError('USER_EXISTS')
 			}
-			return ctx.broker.call(
+			return ctx.call<SelectProfileReturn, SelectProfileParams>(
 				'v1.user.profile.selectProfile',
 				{ empId: asEmployee },
 				{
 					meta: {
-						...ctx.meta,
 						userId: user._id,
 					},
 				},

@@ -1,20 +1,16 @@
-import mongoose from 'mongoose'
+import mongoose, { Document, Schema, Types } from 'mongoose'
 import config from '@/config'
 import { Gender, PUBLIC_ORG } from '@/constants/business'
 import { schemaOption } from '@/models/common/index'
 import { randomPrivateCode } from '@utils/random'
 
-/**
- * @typedef {import('mongoose').Model} Model
- */
-export const getProfileImagePath = (orgId, empId) => `/profile/organization/${orgId}/${empId}`
+export const getProfileImagePath = (orgId: string, empId: string) =>
+	`/profile/organization/${orgId}/${empId}`
 
-const resolveUserImage = (doc) => {
+const resolveUserImage = (doc: EmployeeDocument) => {
 	// Add prefix for CDN URL profile image
 	if (doc.image) {
-		doc.image = doc.image.startsWith('http')
-			? doc.image // Social Profile image
-			: `${config.cdn.url}${doc.image}`
+		doc.image = doc.image.startsWith('http') ? doc.image : `${config.cdn.url}${doc.image}`
 	}
 	return doc
 }
@@ -67,9 +63,40 @@ export const PUBLIC_USER_KEYS = [
 export const MARITAL_STATUS = {
 	SINGLE: 'single',
 	MARRIED: 'married',
+} as const
+
+export interface EmployeeDocument extends Document {
+	userId: string
+	firstName: string
+	lastName: string
+	nickName: string
+	image: string
+	email: string
+	privateCode?: string | null
+	privateCodeExpiredAt?: Date | null
+	orgId: string
+	deptId: Types.ObjectId
+	jobId: Types.ObjectId
+	reportTo: string
+	roleId: Types.ObjectId
+	lastInvitedAt: Date
+	active: boolean
+	connectedAt: Date
+	unconnectedAt: Date
+	gender: Gender
+	phoneNumber: string
+	dateOfBirth: string
+	language: string
+	hiredAt: Date
+	maritalStatus: keyof typeof MARITAL_STATUS
+	numberOfChildren: number
+	fullName: string
+	displayName: string
+	isPersonalProfile: boolean
+	regenerateCode: () => void
 }
 
-const EmployeeSchema = new mongoose.Schema(
+const EmployeeSchema = new Schema(
 	{
 		_id: {
 			type: String,
@@ -93,15 +120,14 @@ const EmployeeSchema = new mongoose.Schema(
 			required: true,
 			default: PUBLIC_ORG,
 		},
-		deptId: mongoose.Types.ObjectId,
-		jobId: mongoose.Types.ObjectId,
+		deptId: Types.ObjectId,
+		jobId: Types.ObjectId,
 		reportTo: String,
-		roleId: mongoose.Types.ObjectId,
+		roleId: Types.ObjectId,
 		lastInvitedAt: Date,
 		active: { type: Boolean, default: true },
 		connectedAt: Date,
 		unconnectedAt: Date,
-		// personal
 		gender: {
 			type: String,
 			enum: Object.values(Gender),
@@ -126,7 +152,7 @@ const EmployeeSchema = new mongoose.Schema(
 		...schemaOption,
 		toObject: {
 			virtuals: true,
-			transform(doc, ret) {
+			transform(doc: EmployeeDocument, ret: any) {
 				const updatedDoc = resolveUserImage(doc)
 				if (updatedDoc.image) ret.image = updatedDoc.image
 				return ret
@@ -211,15 +237,15 @@ EmployeeSchema.index(
 	},
 )
 
-EmployeeSchema.virtual('fullName').get(function () {
+EmployeeSchema.virtual('fullName').get(function (this: EmployeeDocument) {
 	return this.firstName && this.lastName ? `${this.firstName} ${this.lastName}` : ''
 })
 
-EmployeeSchema.virtual('isPersonalProfile').get(function () {
+EmployeeSchema.virtual('isPersonalProfile').get(function (this: EmployeeDocument) {
 	return this.orgId === PUBLIC_ORG
 })
 
-EmployeeSchema.virtual('displayName').get(function () {
+EmployeeSchema.virtual('displayName').get(function (this: EmployeeDocument) {
 	const fullName =
 		this.firstName || this.lastName
 			? `${this.firstName ? `${this.firstName} ` : ''}${this.lastName}`
@@ -228,9 +254,16 @@ EmployeeSchema.virtual('displayName').get(function () {
 	return this.nickName ?? fullName ?? 'Someone'
 })
 
-EmployeeSchema.post('init', resolveUserImage)
+// @ts-ignore
+EmployeeSchema.post('init', (doc: EmployeeDocument) => {
+	// Add prefix for CDN URL profile image
+	if (doc.image) {
+		doc.image = doc.image.startsWith('http') ? doc.image : `${config.cdn.url}${doc.image}`
+	}
+	return doc
+})
 
-EmployeeSchema.pre('save', function (next) {
+EmployeeSchema.pre('save', function (this: EmployeeDocument, next) {
 	try {
 		if (this.email) {
 			this.email = this.email.toLowerCase()
@@ -247,11 +280,18 @@ EmployeeSchema.pre('save', function (next) {
 	}
 })
 
-EmployeeSchema.methods.regenerateCode = function () {
+EmployeeSchema.method('regenerateCode', function (this: EmployeeDocument) {
 	const date = new Date()
 	this.privateCode = randomPrivateCode()
-	this.privateCodeExpiredAt = date.setMonth(date.getMonth() + 3) //  3 months
+	date.setMonth(date.getMonth() + 3) //  3 months
+	this.privateCodeExpiredAt = date
 	return this
+})
+
+export interface IEmployeeMethods {
+	regenerateCode: () => EmployeeDocument
 }
 
-export const Employee = mongoose.model('Employee', EmployeeSchema)
+export type EmployeeModel = mongoose.Model<EmployeeDocument, any, IEmployeeMethods>
+
+export const Employee = mongoose.model<EmployeeDocument, EmployeeModel>('Employee', EmployeeSchema)

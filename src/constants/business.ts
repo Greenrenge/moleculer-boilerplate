@@ -1,4 +1,5 @@
 export const ADMIN_USER_ID = '__admin'
+
 export enum LoginMethod {
 	EMAIL = 'email',
 	FACEBOOK = 'facebook',

@@ -1,6 +1,7 @@
 import crypto, { randomBytes } from 'crypto'
 import * as jose from 'jose'
 import type { Types } from 'mongoose'
+import type { IToken } from 'v1.auth.issueUserAccessToken'
 import config from '@/config'
 import { ValidationError } from '@/constants/errors'
 
@@ -47,11 +48,6 @@ export const verifyJWT = async (token: string): Promise<any> => {
 	} catch (error) {
 		throw new ValidationError('INVALID_TOKEN')
 	}
-}
-
-export interface IToken {
-	access_token: string
-	token_type: string
 }
 
 export const issueUserAccessToken = async (

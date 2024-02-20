@@ -1,4 +1,4 @@
-import type { Document, Model } from 'mongoose'
+import type { Document, Model, Types } from 'mongoose'
 import mongoose from 'mongoose'
 import { schemaOption } from '@/models/common/index'
 
@@ -9,7 +9,7 @@ export const DEVICE_TYPE = {
 
 type DeviceType = (typeof DEVICE_TYPE)[keyof typeof DEVICE_TYPE]
 
-interface UserLoginDeviceDocument extends Document {
+interface UserLoginDeviceDocument extends Document<Types.ObjectId> {
 	userId: string
 	deviceId: string
 	deviceToken: string

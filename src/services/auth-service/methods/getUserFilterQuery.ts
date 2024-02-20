@@ -35,4 +35,4 @@ const getUserFilterQuery = (entity: Document, registerType: LoginMethod): Record
 	}
 }
 
-export default getUserFilterQuery
+export default getUserFilterQuery // need to assign type to broker

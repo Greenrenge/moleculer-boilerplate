@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt'
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 import { schemaOption } from '@/models/common'
 
 export const encryptPassword = (password: string): Promise<string> => bcrypt.hash(password, 10)
 
-export interface UserLoginDocument extends Document {
+export interface UserLoginDocument extends Document<string> {
 	email: string
 	password: string
 	integration: {

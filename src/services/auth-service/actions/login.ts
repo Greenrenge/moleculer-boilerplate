@@ -1,14 +1,10 @@
 import bcrypt from 'bcrypt'
 import type { ServiceBroker } from 'moleculer'
+import type { LoginParams, LoginReturn } from 'v1.auth.login'
+import { SelectProfileParams, SelectProfileReturn } from 'v1.user.profile.selectProfile'
 import type { AppContextMeta } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import { UserLogin } from '@/services/auth-service/models/user-login'
-
-type LoginParams = {
-	email: string
-	password: string
-	asEmployee?: boolean | string
-}
 
 export default {
 	params: {
@@ -23,7 +19,7 @@ export default {
 	handler: async function login(
 		this: ServiceBroker,
 		ctx: AppContextMeta<LoginParams>,
-	): Promise<any> {
+	): LoginReturn {
 		// this.logger.info(`ACTION: ${ctx.action?.name}`, ctx);
 		const { email, password, asEmployee = true } = ctx.params
 
@@ -41,12 +37,11 @@ export default {
 			throw new ValidationError('USER_INCORRECT_CREDENTIALS')
 		}
 
-		return this.broker.call(
+		return ctx.call<SelectProfileReturn, SelectProfileParams>(
 			'v1.user.profile.selectProfile',
 			{ empId: asEmployee },
 			{
 				meta: {
-					...ctx.meta,
 					userId: user._id,
 				},
 			},
