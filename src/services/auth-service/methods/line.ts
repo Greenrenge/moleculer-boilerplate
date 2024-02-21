@@ -1,5 +1,6 @@
 import axios from 'axios'
 import type { ServiceBroker } from 'moleculer'
+import { MoleculerService } from '@/common-types'
 import config from '@/config'
 import { ValidationError } from '@/constants/errors'
 
@@ -54,7 +55,7 @@ const _parseName = (name: string): { firstName: string; lastName: string } => {
  * @param {string} params.accessToken
  */
 async function registerByLine(
-	this: ServiceBroker,
+	this: MoleculerService,
 	params: { [key: string]: any; accessToken?: string },
 ): Promise<{
 	email: string

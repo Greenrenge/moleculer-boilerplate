@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Types } from 'mongoose'
+import mongoose, { Document, FlattenMaps, HydratedDocument, Schema, Types } from 'mongoose'
 import config from '@/config'
 import { Gender, PUBLIC_ORG } from '@/constants/business'
 import { schemaOption } from '@/models/common/index'
@@ -65,35 +65,38 @@ export const MARITAL_STATUS = {
 	MARRIED: 'married',
 } as const
 
-export interface EmployeeDocument extends Document {
-	userId: string
-	firstName: string
-	lastName: string
-	nickName: string
-	image: string
-	email: string
+// input type when create
+export interface EmployeeDocument extends Document<string> {
+	userId?: string
+	firstName?: string
+	lastName?: string
+	nickName?: string
+	image?: string
+	email?: string
 	privateCode?: string | null
 	privateCodeExpiredAt?: Date | null
 	orgId: string
-	deptId: Types.ObjectId
-	jobId: Types.ObjectId
-	reportTo: string
-	roleId: Types.ObjectId
-	lastInvitedAt: Date
+	deptId?: Types.ObjectId
+	jobId?: Types.ObjectId
+	reportTo?: string
+	roleId?: Types.ObjectId
+	lastInvitedAt?: Date
 	active: boolean
-	connectedAt: Date
-	unconnectedAt: Date
-	gender: Gender
-	phoneNumber: string
-	dateOfBirth: string
-	language: string
-	hiredAt: Date
-	maritalStatus: keyof typeof MARITAL_STATUS
-	numberOfChildren: number
-	fullName: string
-	displayName: string
-	isPersonalProfile: boolean
-	regenerateCode: () => void
+	connectedAt?: Date
+	unconnectedAt?: Date
+	gender?: Gender
+	phoneNumber?: string
+	dateOfBirth?: string
+	language?: string
+	hiredAt?: Date
+	maritalStatus?: keyof typeof MARITAL_STATUS
+	numberOfChildren?: number
+	createdAt: Date
+	updatedAt: Date
+
+	// fullName: string
+	// displayName: string
+	// isPersonalProfile: boolean
 }
 
 const EmployeeSchema = new Schema(
@@ -125,7 +128,7 @@ const EmployeeSchema = new Schema(
 		reportTo: String,
 		roleId: Types.ObjectId,
 		lastInvitedAt: Date,
-		active: { type: Boolean, default: true },
+		active: { type: Boolean, default: true, required: true },
 		connectedAt: Date,
 		unconnectedAt: Date,
 		gender: {
@@ -236,26 +239,31 @@ EmployeeSchema.index(
 		},
 	},
 )
+interface IEmployeeVirtual {
+	fullName: string
+	displayName: string
+	isPersonalProfile: boolean
+}
 
-EmployeeSchema.virtual('fullName').get(function (this: EmployeeDocument) {
+EmployeeSchema.virtual('fullName').get(function (this: EmployeeInstance) {
 	return this.firstName && this.lastName ? `${this.firstName} ${this.lastName}` : ''
 })
 
-EmployeeSchema.virtual('isPersonalProfile').get(function (this: EmployeeDocument) {
+EmployeeSchema.virtual('isPersonalProfile').get(function (this: EmployeeInstance) {
 	return this.orgId === PUBLIC_ORG
 })
 
-EmployeeSchema.virtual('displayName').get(function (this: EmployeeDocument) {
+EmployeeSchema.virtual('displayName').get(function (this: EmployeeInstance) {
 	const fullName =
 		this.firstName || this.lastName
 			? `${this.firstName ? `${this.firstName} ` : ''}${this.lastName}`
 			: ''
 
-	return this.nickName ?? fullName ?? 'Someone'
+	return this.nickName ?? fullName ?? ''
 })
 
 // @ts-ignore
-EmployeeSchema.post('init', (doc: EmployeeDocument) => {
+EmployeeSchema.post('init', (doc: EmployeeInstance) => {
 	// Add prefix for CDN URL profile image
 	if (doc.image) {
 		doc.image = doc.image.startsWith('http') ? doc.image : `${config.cdn.url}${doc.image}`
@@ -263,7 +271,7 @@ EmployeeSchema.post('init', (doc: EmployeeDocument) => {
 	return doc
 })
 
-EmployeeSchema.pre('save', function (this: EmployeeDocument, next) {
+EmployeeSchema.pre('save', function (this: EmployeeInstance, next) {
 	try {
 		if (this.email) {
 			this.email = this.email.toLowerCase()
@@ -280,6 +288,10 @@ EmployeeSchema.pre('save', function (this: EmployeeDocument, next) {
 	}
 })
 
+interface IEmployeeMethods {
+	regenerateCode: () => EmployeeDocument
+}
+
 EmployeeSchema.method('regenerateCode', function (this: EmployeeDocument) {
 	const date = new Date()
 	this.privateCode = randomPrivateCode()
@@ -288,10 +300,19 @@ EmployeeSchema.method('regenerateCode', function (this: EmployeeDocument) {
 	return this
 })
 
-export interface IEmployeeMethods {
-	regenerateCode: () => EmployeeDocument
-}
-
-export type EmployeeModel = mongoose.Model<EmployeeDocument, any, IEmployeeMethods>
+type EmployeeModel = mongoose.Model<EmployeeDocument, any, IEmployeeMethods, IEmployeeVirtual>
 
 export const Employee = mongoose.model<EmployeeDocument, EmployeeModel>('Employee', EmployeeSchema)
+
+// return type
+export type EmployeeInstance = HydratedDocument<
+	EmployeeDocument,
+	IEmployeeMethods & {
+		fullName: string
+		displayName: string
+		isPersonalProfile: boolean
+	}
+>
+
+// toJSON()
+export type TEmployee = FlattenMaps<EmployeeInstance>

@@ -1,12 +1,7 @@
 import type { ServiceBroker } from 'moleculer'
-import type { AppContextMeta } from '@/common-types'
+import { UpdateDeviceParams, UpdateDeviceReturn } from 'v1.auth.device.update'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { UserLoginDevice } from '@/services/auth-service/models/user-login-device'
-
-type UpdateDeviceParams = {
-	deviceId?: string
-	deviceToken?: string
-	deviceType: string
-}
 
 export default {
 	params: {
@@ -23,9 +18,9 @@ export default {
 		},
 	},
 	handler: async function updateDevice(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<UpdateDeviceParams>,
-	): Promise<any> {
+	): Promise<UpdateDeviceReturn> {
 		this.logger.info(`ACTION: ${ctx.action?.name}`, ctx)
 		const { userId } = ctx.meta
 		const updated = await UserLoginDevice.findOneAndUpdate(
@@ -39,6 +34,6 @@ export default {
 			},
 			{ upsert: true, new: true },
 		)
-		return updated
+		return updated?.toJSON()
 	},
 }

@@ -6,6 +6,7 @@ export default (authActionName = 'v1.auth.resolveToken') => ({
 			// Get JWT token from cookie or Get JWT token from Authorization header
 			const parsedCookie = req.headers.cookie && cookie.parse(req.headers.cookie)
 
+			// TODO: change this to accept language from the request header
 			const lang = (parsedCookie && parsedCookie.lang) || req.headers['x-language']
 			ctx.meta.lang = lang || 'th'
 

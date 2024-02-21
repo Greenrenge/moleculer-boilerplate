@@ -1,4 +1,4 @@
-import type { Document, Model, Types } from 'mongoose'
+import type { Document, FlattenMaps, HydratedDocument, Model, Types } from 'mongoose'
 import mongoose from 'mongoose'
 import { schemaOption } from '@/models/common/index'
 
@@ -9,17 +9,13 @@ export const DEVICE_TYPE = {
 
 type DeviceType = (typeof DEVICE_TYPE)[keyof typeof DEVICE_TYPE]
 
-interface UserLoginDeviceDocument extends Document<Types.ObjectId> {
+export interface UserLoginDeviceDocument extends Document<Types.ObjectId> {
 	userId: string
 	deviceId: string
 	deviceToken: string
 	deviceType: DeviceType
 	createdAt: Date
 	updatedAt: Date
-}
-
-interface UserLoginDeviceModel extends Model<UserLoginDeviceDocument> {
-	findByUserId(userId: string): Promise<UserLoginDeviceDocument[]>
 }
 
 const UserLoginDeviceSchema = new mongoose.Schema(
@@ -51,13 +47,20 @@ UserLoginDeviceSchema.index({
 })
 
 UserLoginDeviceSchema.static('findByUserId', function findByUserId(userId: string): Promise<
-	UserLoginDeviceDocument[]
+	UserLoginDeviceInstance[]
 > {
 	return this.find({ userId })
 })
+interface UserLoginDeviceModel extends Model<UserLoginDeviceDocument> {
+	findByUserId(userId: string): Promise<UserLoginDeviceDocument[]>
+}
 
 export const UserLoginDevice = mongoose.model<UserLoginDeviceDocument, UserLoginDeviceModel>(
 	'UserLoginDevice',
 	UserLoginDeviceSchema,
 	'user_login_device',
 )
+
+export type UserLoginDeviceInstance = HydratedDocument<UserLoginDeviceDocument>
+
+export type TUserLoginDevice = FlattenMaps<UserLoginDeviceInstance>

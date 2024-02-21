@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import type { ServiceBroker } from 'moleculer'
 import type { LoginParams, LoginReturn } from 'v1.auth.login'
 import { SelectProfileParams, SelectProfileReturn } from 'v1.user.profile.selectProfile'
-import type { AppContextMeta } from '@/common-types'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import { UserLogin } from '@/services/auth-service/models/user-login'
 
@@ -17,9 +17,9 @@ export default {
 		},
 	},
 	handler: async function login(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<LoginParams>,
-	): LoginReturn {
+	): Promise<LoginReturn> {
 		// this.logger.info(`ACTION: ${ctx.action?.name}`, ctx);
 		const { email, password, asEmployee = true } = ctx.params
 

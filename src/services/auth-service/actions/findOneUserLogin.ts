@@ -5,7 +5,8 @@ import { UserLogin } from '@/services/auth-service/models/user-login'
 /**
  * Query User from given query
  */
-const findOneUserLogin = (ctx: AppContextMeta<FindOneUserLoginParams>): FindOneUserLoginReturn =>
-	UserLogin.findOne(ctx.params.query)
+const findOneUserLogin = (
+	ctx: AppContextMeta<FindOneUserLoginParams>,
+): Promise<FindOneUserLoginReturn> => UserLogin.findOne(ctx.params.query)
 
 export default findOneUserLogin

@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import axios from 'axios'
 import type { ServiceBroker } from 'moleculer'
+import { MoleculerService } from '@/common-types'
 import config from '@/config'
 import { ValidationError } from '@/constants/errors'
 
@@ -49,7 +50,7 @@ const _verifyToken = async (token: string): Promise<FacebookProfile> => {
  * @param {string} params.accessToken
  */
 async function registerByFacebook(
-	this: ServiceBroker,
+	this: MoleculerService,
 	params: { [key: string]: any; accessToken?: string },
 ): Promise<{
 	email: string

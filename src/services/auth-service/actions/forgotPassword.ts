@@ -1,6 +1,6 @@
 import type { ServiceBroker } from 'moleculer'
 import type { ForgotPasswordParams, ForgotPasswordReturn } from 'v1.auth.forgetPassword'
-import type { AppContextMeta } from '@/common-types'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import { ResetPassword } from '@/services/auth-service/models/reset-password'
 import { UserLogin } from '@/services/auth-service/models/user-login'
@@ -14,9 +14,9 @@ export default {
 		email: { type: 'string' },
 	},
 	handler: async function forgotPassword(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<ForgotPasswordParams>,
-	): ForgotPasswordReturn {
+	): Promise<ForgotPasswordReturn> {
 		this.logger.info(`ACTION: ${ctx.action?.name}`, ctx)
 		const { email } = ctx.params
 

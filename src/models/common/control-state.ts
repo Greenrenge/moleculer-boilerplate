@@ -1,11 +1,13 @@
 import base62 from 'base62'
-import type { Document, Model } from 'mongoose'
+import type { Document, FlattenMaps, Model } from 'mongoose'
 import mongoose from 'mongoose'
 import { schemaOption } from '@/models/common'
 
-export interface ControlStateDocument extends Document {
+interface ControlStateDocument extends Document {
 	last: number
 }
+
+export type TControlState = FlattenMaps<ControlStateDocument>
 
 interface ControlStateModel extends Model<ControlStateDocument> {
 	getNextUserId(): Promise<string>

@@ -1,9 +1,9 @@
 import { ListProfileParams, ListProfileReturn } from 'v1.organization.employee.listProfile'
 import { AppContextMeta } from '@/common-types'
-import { Employee, EmployeeDocument } from '@org/models/employee'
+import { Employee } from '@org/models/employee'
 
 export default {
-	async handler(ctx: AppContextMeta<ListProfileParams>): ListProfileReturn {
+	async handler(ctx: AppContextMeta<ListProfileParams>): Promise<ListProfileReturn> {
 		const { userId } = ctx.meta
 		if (!userId) return []
 
@@ -17,6 +17,6 @@ export default {
 
 		return [publicProfile, ...organizationProfiles]
 			.filter((a) => !!a) // prevent not found publicProfile
-			.map((a) => a?.toObject() as EmployeeDocument)
+			.map((a) => a?.toObject())
 	},
 }

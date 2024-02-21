@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Types } from 'mongoose'
+import mongoose, { Document, FlattenMaps, HydratedDocument, Schema, Types } from 'mongoose'
 import { schemaOption } from '@/models/common/index'
 
 export interface PermissionsDocument extends Document<string> {
@@ -10,9 +10,11 @@ export interface RoleDocument extends Document<Types.ObjectId> {
 	name: string
 	permissions: PermissionsDocument[]
 	isDefaultRole: boolean
+	createdAt: Date
+	updatedAt: Date
 }
 
-const PermissionsSchema = new Schema<Permissions>(
+const PermissionsSchema = new Schema<PermissionsDocument>(
 	{
 		_id: {
 			type: String,
@@ -50,3 +52,9 @@ const RoleSchema = new Schema<RoleDocument>(
 )
 
 export const Role = mongoose.model<RoleDocument>('Role', RoleSchema)
+
+export type PermissionsInstance = HydratedDocument<PermissionsDocument>
+export type TPermissions = FlattenMaps<PermissionsInstance>
+
+export type RoleInstance = HydratedDocument<RoleDocument>
+export type TRole = FlattenMaps<RoleInstance>

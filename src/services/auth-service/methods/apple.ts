@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import type { ServiceBroker } from 'moleculer'
+import { MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
-import type { RegisterParams } from '../actions/register'
 
 /**
  * Get Apple Profile from given id token
@@ -24,7 +24,7 @@ const _verifyToken = (token: string) => {
  * Handle the Register/Login by Apple Single Sign On
  */
 export default function registerByApple(
-	this: ServiceBroker,
+	this: MoleculerService,
 	params: { [key: string]: any; accessToken?: string },
 ): {
 	integration: { apple: { userId: string; integratedAt: Date } }

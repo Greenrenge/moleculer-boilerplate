@@ -47,7 +47,7 @@ module.exports = {
 		],
 		// ensure consistent array typings
 		'@typescript-eslint/array-type': 'error',
-
+		'@typescript-eslint/ban-types': 'off',
 		// ban ts-comment except with description
 		'@typescript-eslint/ban-ts-comment': [
 			'off',

@@ -1,4 +1,5 @@
 import type { ServiceBroker } from 'moleculer'
+import { MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 
 interface RegisterParams {
@@ -8,7 +9,7 @@ interface RegisterParams {
 }
 
 export default function registerByEmail(
-	this: ServiceBroker,
+	this: MoleculerService,
 	params: RegisterParams,
 ): {
 	email: string

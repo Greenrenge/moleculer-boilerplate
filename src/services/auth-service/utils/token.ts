@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import crypto, { randomBytes } from 'crypto'
 import * as jose from 'jose'
 import type { Types } from 'mongoose'
 import type { IToken } from 'v1.auth.issueUserAccessToken'
+import { CreateUserReturn } from 'v1.user.create'
 import config from '@/config'
 import { ValidationError } from '@/constants/errors'
+import { UserLoginInstance } from '../models/user-login'
 
 const JWKS = jose.createLocalJWKSet(config.jwt.jwks)
 /**
@@ -16,7 +19,11 @@ function loadPrivateKey() {
 	return jose.importJWK(config.jwt.signingKey, alg)
 }
 
-const generateToken = async (payload: any): Promise<string> => {
+const generateToken = async (payload: {
+	_id: Types.ObjectId | string
+	email?: string
+	[key: string]: any
+}): Promise<string> => {
 	privatekey = privatekey || (await loadPrivateKey())
 	return new jose.SignJWT({
 		...payload,
@@ -26,7 +33,7 @@ const generateToken = async (payload: any): Promise<string> => {
 		.setIssuer(config.jwt.issuer)
 		.setAudience(config.jwt.audience)
 		.setExpirationTime(config.jwt.expiresIn)
-		.setSubject(payload?._id)
+		.setSubject(payload?._id?.toString())
 		.sign(privatekey)
 }
 
@@ -38,7 +45,7 @@ export const generateRandomToken = (): string => {
 /**
  * Verify a JWT token and return the decoded payload
  */
-export const verifyJWT = async (token: string): Promise<any> => {
+export const verifyJWT = async (token: string): Promise<jose.JWTPayload> => {
 	try {
 		const { key, payload, protectedHeader } = await jose.jwtVerify(token, JWKS, {
 			issuer: config.jwt.issuer,
@@ -51,11 +58,7 @@ export const verifyJWT = async (token: string): Promise<any> => {
 }
 
 export const issueUserAccessToken = async (
-	user: {
-		[key: string]: any
-		_id: string | Types.ObjectId
-		email: string
-	},
+	user: CreateUserReturn | UserLoginInstance,
 	otherClaims?: Record<string, any>,
 ): Promise<IToken> => {
 	const accessToken = await generateToken({

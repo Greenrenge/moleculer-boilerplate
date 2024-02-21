@@ -1,5 +1,5 @@
-import type { ServiceBroker } from 'moleculer'
-import type { RegisterParams } from '../actions/register'
+import { RegisterParams } from 'v1.auth.register'
+import { MoleculerService } from '@/common-types'
 import type apple from './apple'
 import type email from './email'
 import type facebook from './facebook'
@@ -7,7 +7,7 @@ import type google from './google'
 import type line from './line'
 
 function verifyUserInfo(
-	this: ServiceBroker & {
+	this: MoleculerService & {
 		facebook: typeof facebook
 		google: typeof google
 		line: typeof line

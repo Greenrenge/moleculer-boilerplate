@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt'
-import mongoose, { Document } from 'mongoose'
+import mongoose, { Document, FlattenMaps, HydratedDocument, Model } from 'mongoose'
 import { schemaOption } from '@/models/common'
 
 export const encryptPassword = (password: string): Promise<string> => bcrypt.hash(password, 10)
-
 export interface UserLoginDocument extends Document<string> {
 	email: string
 	password: string
@@ -32,6 +31,7 @@ export interface UserLoginDocument extends Document<string> {
 	createdAt: Date
 	updatedAt: Date
 }
+
 const IntegrationSchema = new mongoose.Schema(
 	{
 		userId: String,
@@ -103,8 +103,14 @@ UserLoginSchema.pre('save', async function (next) {
 	}
 })
 
-export const UserLogin = mongoose.model<UserLoginDocument>(
+export type UserLoginModel = Model<UserLoginDocument>
+
+export const UserLogin = mongoose.model<UserLoginDocument, UserLoginModel>(
 	'UserLogin',
 	UserLoginSchema,
 	'user_login',
 )
+
+export type UserLoginInstance = HydratedDocument<UserLoginDocument>
+
+export type TUserLogin = FlattenMaps<UserLoginInstance>

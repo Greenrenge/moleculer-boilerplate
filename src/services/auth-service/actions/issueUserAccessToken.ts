@@ -4,7 +4,7 @@ import type {
 	IssueUserAccessTokenParams,
 	IssueUserAccessTokenReturn,
 } from 'v1.auth.issueUserAccessToken'
-import type { AppContextMeta } from '@/common-types'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import { UserLogin } from '@/services/auth-service/models/user-login'
 import { issueUserAccessToken } from '../utils/token'
@@ -24,21 +24,23 @@ export default {
 		},
 		orgId: 'string',
 	},
+	// user for admin imporsonate
 	async handler(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<IssueUserAccessTokenParams>,
-	): IssueUserAccessTokenReturn {
+	): Promise<IssueUserAccessTokenReturn> {
+		// orgId is the target org
 		const { empId, orgId, roleId, permissions: _permissions = [] } = ctx.params
 
-		const user = await UserLogin.findById(ctx.params.userId)
+		const login = await UserLogin.findById(ctx.params.userId)
 
-		if (!user) {
+		if (!login) {
 			throw new ValidationError('USER_NOT_EXIST')
 		}
 
 		const permissions = _permissions.length ? packRules(_permissions) : _permissions
 
-		const token = await issueUserAccessToken(user, { empId, orgId, permissions, roleId })
+		const token = await issueUserAccessToken(login, { empId, orgId, permissions, roleId })
 		return token
 	},
 }

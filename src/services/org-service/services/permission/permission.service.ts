@@ -18,7 +18,7 @@ export default {
 			params: {
 				id: { type: 'objectID', ObjectID: mongoose.Types.ObjectId },
 			},
-			async handler(ctx: AppContextMeta<GetByRoleIdParams>): GetByRoleIdReturn {
+			async handler(ctx: AppContextMeta<GetByRoleIdParams>): Promise<GetByRoleIdReturn> {
 				const { userId, roleId } = ctx.meta
 				if (userId === ADMIN_USER_ID && ctx.params.id?.toString() === roleId?.toString()) {
 					// super admin

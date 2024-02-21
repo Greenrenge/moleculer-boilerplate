@@ -1,14 +1,9 @@
 import type { ServiceBroker } from 'moleculer'
-import type { AppContextMeta } from '@/common-types'
+import { ResetPasswordParams, ResetPasswordReturn } from 'v1.auth.resetPassword'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import { ResetPassword } from '@/services/auth-service/models/reset-password'
 import { UserLogin } from '@/services/auth-service/models/user-login'
-
-type ResetPasswordParams = {
-	email: string
-	code: string
-	password: string
-}
 
 export default {
 	params: {
@@ -17,9 +12,9 @@ export default {
 		password: { type: 'string' },
 	},
 	async handler(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<ResetPasswordParams>,
-	): Promise<{ message: string }> {
+	): Promise<ResetPasswordReturn> {
 		const { email, code, password } = ctx.params
 
 		const item = await ResetPassword.findOne({

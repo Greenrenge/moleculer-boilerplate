@@ -1,7 +1,7 @@
 import get from 'lodash/get'
 import type { ServiceBroker } from 'moleculer'
 import type { ConnectSocialParams, ConnectSocialReturn } from 'v1.auth.connectSocial'
-import type { AppContextMeta } from '@/common-types'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import type { UserLoginDocument } from '../models/user-login'
 import { UserLogin } from '../models/user-login'
@@ -16,9 +16,9 @@ export default {
 		accessToken: { type: 'string' },
 	},
 	handler: async function connectSocial(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<ConnectSocialParams>,
-	): ConnectSocialReturn {
+	): Promise<ConnectSocialReturn> {
 		this.logger.info(`ACTION: ${ctx.action?.name}`, ctx)
 
 		const { registerType } = ctx.params
@@ -40,6 +40,6 @@ export default {
 			{ new: true },
 		)
 
-		return user
+		return user?.toJSON()
 	},
 }

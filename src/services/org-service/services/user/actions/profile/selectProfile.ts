@@ -8,7 +8,7 @@ import {
 import { ListProfileParams, ListProfileReturn } from 'v1.organization.employee.listProfile'
 import { GetByRoleIdParams, GetByRoleIdReturn, IPermission } from 'v1.permission.getByRoleId'
 import { SelectProfileParams, SelectProfileReturn } from 'v1.user.profile.selectProfile'
-import type { AppContextMeta } from '@/common-types'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { PUBLIC_ORG } from '@/constants/business'
 import { USER_ERRORS, ValidationError } from '@/constants/errors'
 import { Employee } from '@org/models/employee'
@@ -23,9 +23,9 @@ export default {
 		},
 	},
 	handler: async function selectProfile(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<SelectProfileParams>,
-	): SelectProfileReturn {
+	): Promise<SelectProfileReturn> {
 		this.logger.info(`ACTION: ${ctx.action!.name}`, ctx)
 		const { empId } = ctx.params
 		const { userId } = ctx.meta

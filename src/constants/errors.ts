@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Errors } from 'moleculer'
+import { ObjectValues } from '@/common-types'
 
 // type ReadonlyError = Readonly<{
 // 	[K in (typeof keys)[number]]: Readonly<{
@@ -76,6 +77,7 @@ export const USER_ERRORS = {
 } as const
 
 type ErrorKey = keyof typeof USER_ERRORS
+type ErrorValue = ObjectValues<typeof USER_ERRORS>
 
 // const keys = Object.keys(ERRORS) as (keyof typeof ERRORS)[]
 

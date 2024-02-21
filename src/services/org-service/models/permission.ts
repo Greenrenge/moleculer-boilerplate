@@ -1,5 +1,5 @@
 import startCase from 'lodash/startCase'
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Document, FlattenMaps, HydratedDocument, Schema } from 'mongoose'
 import { PermActions } from '@/constants/business'
 import { schemaOption } from '@/models/common/index'
 
@@ -8,10 +8,8 @@ interface PermissionDocument extends Document<string> {
 	label: string
 	action: PermActions
 	subject: string
-}
-
-interface PermissionModel extends mongoose.Model<PermissionDocument> {
-	getId(action: PermActions, subject: string): string
+	createdAt: Date
+	updatedAt: Date
 }
 
 const PermissionsSchema = new Schema<PermissionDocument>(
@@ -57,8 +55,14 @@ PermissionsSchema.static('getId', (action: PermActions, subject: string): string
 	}
 	return `${subject}::${action}`
 })
+interface PermissionModel extends mongoose.Model<PermissionDocument> {
+	getId(action: PermActions, subject: string): string
+}
 
 export const Permission = mongoose.model<PermissionDocument, PermissionModel>(
 	'Permission',
 	PermissionsSchema,
 )
+
+export type PermissionInstance = HydratedDocument<PermissionDocument>
+export type TPermission = FlattenMaps<PermissionInstance>

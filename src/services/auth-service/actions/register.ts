@@ -1,8 +1,8 @@
-import type { ActionSchema } from 'moleculer'
-import { IToken } from 'v1.auth.issueUserAccessToken'
+import type { ActionSchema, Service, ServiceBroker, ServiceSettingSchema } from 'moleculer'
 import { RegisterParams, RegisterReturn } from 'v1.auth.register'
+import { CreateUserParams, CreateUserReturn } from 'v1.user.create'
 import { SelectProfileParams, SelectProfileReturn } from 'v1.user.profile.selectProfile'
-import type { AppContextMeta } from '@/common-types'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { LoginMethod } from '@/constants/business'
 import { ValidationError } from '@/constants/errors'
 import { ControlState } from '@/models/common/control-state'
@@ -35,7 +35,10 @@ export default {
 		},
 	},
 
-	handler: async function register(ctx: AppContextMeta<RegisterParams>): RegisterReturn {
+	handler: async function register(
+		this: MoleculerService,
+		ctx: AppContextMeta<RegisterParams>,
+	): Promise<RegisterReturn> {
 		// this.logger.info(`ACTION: ${ctx.action.name}`, ctx)
 		const { registerType = LoginMethod.EMAIL, asEmployee } = ctx.params
 
@@ -75,7 +78,7 @@ export default {
 		const createdAuthUser = await newAuthUser.save()
 
 		const userInfo = { _id, email, ...rest }
-		let userPublicProfile: any
+		let userPublicProfile: CreateUserReturn
 		try {
 			userPublicProfile = await this.broker.call('v1.user.create', userInfo, {
 				meta: {

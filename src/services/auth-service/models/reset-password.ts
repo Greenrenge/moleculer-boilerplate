@@ -1,23 +1,19 @@
-import type { Document, Model, Types } from 'mongoose'
+import type { Document, FlattenMaps, HydratedDocument, Model, Types } from 'mongoose'
 import mongoose from 'mongoose'
 import { schemaOption } from '@/models/common/index'
 import { randomCode } from '@/utils/random'
 
-interface ResetPasswordDocument extends Document<Types.ObjectId> {
+export interface ResetPasswordDocument extends Document<Types.ObjectId> {
 	userId: string
 	email: string
 	code: string
 	expiresAt?: Date
-	isExpired: boolean
+
+	// virtual and timestamp fields
+
+	// isExpired: boolean // TODO: make it read but not assign when new Model() ?
 	createdAt: Date
 	updatedAt: Date
-}
-
-interface ResetPasswordModel extends Model<ResetPasswordDocument> {
-	generateResetCode(user: {
-		_id: string | Types.ObjectId
-		email: string
-	}): Promise<ResetPasswordDocument>
 }
 
 const ResetPasswordSchema = new mongoose.Schema(
@@ -46,6 +42,9 @@ ResetPasswordSchema.index({
 	code: -1,
 })
 
+type IResetPasswordVirtual = {
+	isExpired: boolean
+}
 ResetPasswordSchema.virtual('isExpired').get(function (this: ResetPasswordDocument) {
 	const isExpired = new Date().getTime() - (this.expiresAt?.getTime() || 0) > 0
 	return isExpired
@@ -53,10 +52,13 @@ ResetPasswordSchema.virtual('isExpired').get(function (this: ResetPasswordDocume
 
 ResetPasswordSchema.static(
 	'generateResetCode',
-	async function (user: {
-		_id: string | Types.ObjectId
-		email: string
-	}): Promise<ResetPasswordDocument> {
+	async function (
+		this: ResetPasswordRawModel,
+		user: {
+			_id: string | Types.ObjectId
+			email: string
+		},
+	): Promise<ResetPasswordDocument> {
 		const expiresAt = new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
 		const code = randomCode()
 		const res = await this.findOneAndUpdate(
@@ -77,8 +79,19 @@ ResetPasswordSchema.static(
 	},
 )
 
+type ResetPasswordRawModel = Model<ResetPasswordDocument, {}, {}, IResetPasswordVirtual>
+export interface ResetPasswordModel extends ResetPasswordRawModel {
+	generateResetCode(user: {
+		_id: string | Types.ObjectId
+		email: string
+	}): Promise<ResetPasswordDocument>
+}
+
 export const ResetPassword = mongoose.model<ResetPasswordDocument, ResetPasswordModel>(
 	'ResetPassword',
 	ResetPasswordSchema,
 	'reset_password',
 )
+
+export type ResetPasswordInstance = HydratedDocument<ResetPasswordDocument, IResetPasswordVirtual>
+export type TResetPassword = FlattenMaps<ResetPasswordInstance>

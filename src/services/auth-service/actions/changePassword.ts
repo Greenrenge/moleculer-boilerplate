@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import type { ServiceBroker } from 'moleculer'
 import { Errors } from 'moleculer'
 import type { ChangePasswordParams, ChangePasswordReturn } from 'v1.auth.changePassword'
-import type { AppContextMeta } from '@/common-types'
+import type { AppContextMeta, MoleculerService } from '@/common-types'
 import { ValidationError } from '@/constants/errors'
 import { UserLogin } from '@/services/auth-service/models/user-login'
 
@@ -12,9 +12,9 @@ export default {
 		newPassword: { type: 'string', min: 8 },
 	},
 	async handler(
-		this: ServiceBroker,
+		this: MoleculerService,
 		ctx: AppContextMeta<ChangePasswordParams>,
-	): ChangePasswordReturn {
+	): Promise<ChangePasswordReturn> {
 		this.logger.info(`ACTION: ${ctx.action?.name}`, ctx)
 
 		const { userId } = ctx.meta
