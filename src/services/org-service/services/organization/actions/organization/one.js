@@ -22,7 +22,7 @@ export default {
 	/** @param {Context} ctx */
 	async handler(ctx) {
 		const { id } = ctx.params
-		if (id === 'public') return Organization.getcommandseePublicOrg()
+		if (id === 'public') return Organization.getPublicOrg()
 		return Organization.findById(id ?? ctx.meta.orgId)
 	},
 }
