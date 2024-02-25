@@ -6,7 +6,6 @@ export default {
 	async handler(ctx: AppContextMeta<ListProfileParams>): Promise<ListProfileReturn> {
 		const { userId } = ctx.meta
 		if (!userId) return []
-
 		const [organizationProfiles, publicProfile] = await Promise.all([
 			Employee.find({
 				userId,

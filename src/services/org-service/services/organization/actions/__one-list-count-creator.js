@@ -1,3 +1,4 @@
+import { accessibleBy } from '@casl/mongoose'
 import { fetchAbility } from '@org/models/abilityBuilder'
 
 export const createAdminOne = (
@@ -40,10 +41,10 @@ export const createOne = (
 	async handler(ctx) {
 		const { id } = ctx.params
 		const { empId, userId } = ctx.meta
+		const ability = await fetchAbility({ userId, empId, ctx })
 		const doc = await Model.findOne({
-			_id: id,
-			...opts,
-		}).accessibleBy(await fetchAbility({ userId, empId, ctx }))
+			$and: [{ _id: id, ...opts }, ability[Model.modelName]],
+		})
 
 		return doc?.toObject?.()
 	},
@@ -126,7 +127,9 @@ export const createList = (Model, opts, override) => ({
 
 		const { empId, userId } = ctx.meta
 		const ability = await fetchAbility({ userId, empId, ctx })
-		const allDocs = await Model.find(filter).accessibleBy(ability).limit(limit).skip(skip)
+		const allDocs = await Model.find({ $and: [filter, accessibleBy(ability)[Model.modelName]] })
+			.limit(limit)
+			.skip(skip)
 
 		return allDocs.map((d) => d.toObject())
 	},
@@ -151,7 +154,9 @@ export const createCount = (Model, opts, override) => ({
 
 		const { empId, userId } = ctx.meta
 		const ability = await fetchAbility({ userId, empId, ctx })
-		const count = await Model.find(filter).accessibleBy(ability).countDocuments()
+		const count = await Model.find({
+			$and: [filter, accessibleBy(ability)[Model.modelName]],
+		}).countDocuments()
 
 		return count
 	},

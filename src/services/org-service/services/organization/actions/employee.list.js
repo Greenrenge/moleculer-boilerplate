@@ -1,3 +1,4 @@
+import { accessibleBy } from '@casl/mongoose'
 import { fetchAbility } from '@org/models/abilityBuilder'
 import { Employee } from '@org/models/employee'
 
@@ -70,7 +71,11 @@ export default {
 		// due to permission of querying the people + privacy setting so we cannot use paginate
 		// it works like modify query for us, and helps to pagination correctly, may be we just query it via ES is might better
 		const ability = await fetchAbility({ userId, empId, ctx })
-		const allDocs = await Employee.find(filter).accessibleBy(ability).limit(limit).skip(skip)
+		const allDocs = await Employee.find({
+			$and: [filter, accessibleBy(ability)[Employee.modelName]],
+		})
+			.limit(limit)
+			.skip(skip)
 
 		return allDocs.map((d) => d.toObject())
 	},

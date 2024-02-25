@@ -80,9 +80,8 @@ export default {
 		const userInfo = { _id, email, ...rest }
 		let userPublicProfile: CreateUserReturn
 		try {
-			userPublicProfile = await this.broker.call('v1.user.create', userInfo, {
+			userPublicProfile = await ctx.call('v1.user.create', userInfo, {
 				meta: {
-					...ctx.meta,
 					userId: _id,
 				},
 			})

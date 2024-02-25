@@ -1,3 +1,4 @@
+import { accessibleBy } from '@casl/mongoose'
 import { fetchAbility } from '@org/models/abilityBuilder'
 
 export const createListPaginate = (Model, opts, override) => ({
@@ -22,11 +23,17 @@ export const createListPaginate = (Model, opts, override) => ({
 
 		const { empId, userId } = ctx.meta
 		const ability = await fetchAbility({ userId, empId, ctx })
-		const allDocs = await Model.paginate(filter, {
-			skip,
-			limit,
-			sort: { createdAt: -1 },
-		}).accessibleBy(ability)
+
+		const allDocs = await Model.paginate(
+			{
+				$and: [filter, accessibleBy(ability)[Model.modelName]],
+			},
+			{
+				skip,
+				limit,
+				sort: { createdAt: -1 },
+			},
+		)
 
 		return allDocs.map((d) => d.toObject())
 	},

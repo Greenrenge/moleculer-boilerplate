@@ -1,4 +1,3 @@
-import { accessibleRecordsPlugin } from '@casl/mongoose'
 // @ts-ignore
 import upsertMany from '@meanie/mongoose-upsert-many'
 import mongoose from 'mongoose'
@@ -8,7 +7,7 @@ import { mongooseDbReady } from '@utils/gracefully'
 import logger from '@utils/logger'
 
 // loads plugins
-mongoose.plugin(accessibleRecordsPlugin)
+
 mongoose.plugin(mongoosePaginate)
 mongoose.plugin(upsertMany)
 

@@ -1,3 +1,4 @@
+import { accessibleBy } from '@casl/mongoose'
 import { fetchAbility } from '@org/models/abilityBuilder'
 import { Employee } from '@org/models/employee'
 
@@ -37,7 +38,9 @@ export default {
 		}
 
 		const ability = await fetchAbility({ userId, empId, ctx })
-		const count = await Employee.find(filter).accessibleBy(ability).countDocuments()
+		const count = await Employee.find({
+			$and: [filter, accessibleBy(ability)[Employee.modelName]],
+		}).countDocuments()
 
 		return count
 	},

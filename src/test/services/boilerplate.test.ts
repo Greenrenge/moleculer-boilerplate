@@ -20,7 +20,7 @@ describe('Test "BoilerplateService"', () => {
 	// Gracefully stop the broker after all tests
 	after(() => broker.stop())
 
-	it('should return with "Hello John', async () => {
+	test('should return with "Hello John', async () => {
 		const result = await broker.call('boilerplate.sayHello', { name: 'John' })
 		expect(result).to.be.eq('Hello John')
 	})
