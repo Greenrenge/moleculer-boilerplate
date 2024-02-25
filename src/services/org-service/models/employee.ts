@@ -300,7 +300,12 @@ EmployeeSchema.method('regenerateCode', function (this: EmployeeDocument) {
 	return this
 })
 
-type EmployeeModel = mongoose.Model<EmployeeDocument, any, IEmployeeMethods, IEmployeeVirtual>
+type EmployeeModel = mongoose.PaginateModel<
+	EmployeeDocument,
+	any,
+	IEmployeeMethods,
+	IEmployeeVirtual
+>
 
 export const Employee = mongoose.model<EmployeeDocument, EmployeeModel>('Employee', EmployeeSchema)
 

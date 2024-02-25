@@ -1,4 +1,32 @@
-// @ts-nocheck
+/* eslint-disable eqeqeq */
+/* eslint-disable no-console */
+/* eslint-disable no-lonely-if */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/**
+ * @param {Object}              [query={}]
+ * @param {Object}              [options={}]
+ * @param {Object|String}       [options.select='']
+ * @param {Object|String}       [options.projection={}]
+ * @param {Object}              [options.options={}]
+ * @param {Object|String}       [options.sort]
+ * @param {Object|String}       [options.customLabels]
+ * @param {Object}              [options.collation]
+ * @param {Array|Object|String} [options.populate]
+ * @param {Boolean}             [options.lean=false]
+ * @param {Boolean}             [options.leanWithId=true]
+ * @param {Number}              [options.offset=0] - Use offset or page to set skip position
+ * @param {Number}              [options.page=1]
+ * @param {Number}              [options.limit=10]
+ * @param {Boolean}             [options.useEstimatedCount=true] - Enable estimatedDocumentCount for larger datasets. As the name says, the count may not abe accurate.
+ * @param {Function}            [options.useCustomCountFn=false] - use custom function for count datasets.
+ * @param {Object}              [options.read={}] - Determines the MongoDB nodes from which to read.
+ * @param {Function}            [callback]
+ *
+ * @returns {Promise}
+ */
+const PaginationParametersHelper = require('./pagination-parameters')
+const paginateSubDocsHelper = require('./pagination-subdocs')
+
 const defaultOptions = {
 	customLabels: {
 		totalDocs: 'total',
@@ -24,9 +52,11 @@ const defaultOptions = {
 	useEstimatedCount: false,
 	useCustomCountFn: false,
 	forceCountFn: false,
+	allowDiskUse: false,
+	customFind: 'find',
 }
 
-export function paginate(query, options, callback) {
+function paginate(query, options, callback) {
 	options = {
 		...defaultOptions,
 		...paginate.options,
@@ -47,6 +77,8 @@ export function paginate(query, options, callback) {
 		useEstimatedCount,
 		useCustomCountFn,
 		forceCountFn,
+		allowDiskUse,
+		customFind,
 	} = options
 
 	const customLabels = {
@@ -54,7 +86,11 @@ export function paginate(query, options, callback) {
 		...options.customLabels,
 	}
 
-	const limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0
+	let { limit } = defaultOptions
+
+	if (pagination) {
+		limit = parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 0
+	}
 
 	const isCallbackSpecified = typeof callback === 'function'
 	const findOptions = options.options
@@ -80,39 +116,46 @@ export function paginate(query, options, callback) {
 	if (Object.prototype.hasOwnProperty.call(options, 'skip')) {
 		skip = parseInt(options.skip, 10)
 	} else if (Object.prototype.hasOwnProperty.call(options, 'page')) {
-		page = parseInt(options.page, 10)
+		page = parseInt(options.page, 10) < 1 ? 1 : parseInt(options.page, 10)
 		skip = (page - 1) * limit
 	} else {
 		page = 1
 		skip = 0
 	}
 
+	if (!pagination) {
+		page = 1
+	}
+
 	let countPromise
 
-	if (forceCountFn === true) {
-		// Deprecated since starting from MongoDB Node.JS driver v3.1
+	// Only run count when pagination is enabled
+	if (pagination) {
+		if (forceCountFn === true) {
+			// Deprecated since starting from MongoDB Node.JS driver v3.1
 
-		// Hack for mongo < v3.4
-		if (Object.keys(collation).length > 0) {
-			countPromise = this.count(query).collation(collation).exec()
+			// Hack for mongo < v3.4
+			if (Object.keys(collation).length > 0) {
+				countPromise = this.countDocuments(query).collation(collation).exec()
+			} else {
+				countPromise = this.countDocuments(query).exec()
+			}
+		} else if (useEstimatedCount === true) {
+			countPromise = this.estimatedDocumentCount().exec()
+		} else if (typeof useCustomCountFn === 'function') {
+			countPromise = useCustomCountFn()
 		} else {
-			countPromise = this.count(query).exec()
-		}
-	} else if (useEstimatedCount === true) {
-		countPromise = this.estimatedDocumentCount().exec()
-	} else if (typeof useCustomCountFn === 'function') {
-		countPromise = useCustomCountFn()
-	} else {
-		// Hack for mongo < v3.4
-		if (Object.keys(collation).length > 0) {
-			countPromise = this.countDocuments(query).collation(collation).exec()
-		} else {
-			countPromise = this.countDocuments(query).exec()
+			// Hack for mongo < v3.4
+			if (Object.keys(collation).length > 0) {
+				countPromise = this.countDocuments(query).collation(collation).exec()
+			} else {
+				countPromise = this.countDocuments(query).exec()
+			}
 		}
 	}
 
 	if (limit) {
-		const mQuery = this.find(query, projection, findOptions)
+		const mQuery = this[customFind](query, projection, findOptions)
 
 		if (populate) {
 			mQuery.populate(populate)
@@ -141,6 +184,14 @@ export function paginate(query, options, callback) {
 			mQuery.limit(limit)
 		}
 
+		try {
+			if (allowDiskUse === true) {
+				mQuery.allowDiskUse()
+			}
+		} catch (ex) {
+			console.error('Your MongoDB version does not support `allowDiskUse`.')
+		}
+
 		docsPromise = mQuery.exec()
 
 		if (lean && leanWithId) {
@@ -157,7 +208,13 @@ export function paginate(query, options, callback) {
 
 	return Promise.all([countPromise, docsPromise])
 		.then((values) => {
-			const [count, docs] = values
+			let count = values[0]
+			const docs = values[1]
+
+			if (pagination !== true) {
+				count = docs.length
+			}
+
 			const meta = {
 				[labelTotal]: count,
 			}
@@ -190,6 +247,9 @@ export function paginate(query, options, callback) {
 				if (page > 1) {
 					meta[labelHasPrevPage] = true
 					meta[labelPrevPage] = page - 1
+				} else if (page == 1 && typeof skip !== 'undefined' && skip !== 0) {
+					meta[labelHasPrevPage] = true
+					meta[labelPrevPage] = 1
 				}
 
 				// Set next page
@@ -200,15 +260,13 @@ export function paginate(query, options, callback) {
 			}
 
 			// Remove customLabels set to false
-			// eslint-disable-next-line dot-notation
 			delete meta.false
 
-			// eslint-disable-next-line eqeqeq
 			if (limit == 0) {
 				meta[labelLimit] = 0
-				meta[labelTotalPages] = null
-				meta[labelPage] = null
-				meta[labelPagingCounter] = null
+				meta[labelTotalPages] = 1
+				meta[labelPage] = 1
+				meta[labelPagingCounter] = 1
 				meta[labelPrevPage] = null
 				meta[labelNextPage] = null
 				meta[labelHasPrevPage] = false
@@ -232,6 +290,14 @@ export function paginate(query, options, callback) {
 		.catch((error) => (isCallbackSpecified ? callback(error) : Promise.reject(error)))
 }
 
-export default (schema) => {
+/**
+ * @param {Schema} schema
+ */
+module.exports = (schema) => {
 	schema.statics.paginate = paginate
+	schema.statics.paginateSubDocs = paginateSubDocsHelper
 }
+
+module.exports.PaginationParameters = PaginationParametersHelper
+module.exports.paginateSubDocs = paginateSubDocsHelper
+module.exports.paginate = paginate

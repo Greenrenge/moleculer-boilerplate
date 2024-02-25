@@ -1,11 +1,14 @@
-// create public org in given date range
-
 import { Errors } from 'moleculer'
+import {
+	WelcomeMessageListParams,
+	WelcomeMessageListReturn,
+} from 'v1.announcement.welcomeMessage.admin.list'
+import { AppContextMeta } from '@/common-types'
 import { PermActions, PermSubjects } from '@/constants/business'
 import { WelcomeMessage } from '@org/models/event'
 import { Organization } from '@org/models/organization'
 
-export const createWelcomeMessageList = () => ({
+export default {
 	cache: {
 		ttl: 5 * 60, // 5 min
 		keys: ['orgId', 'limit', 'skip', 'start', 'end', '#orgId'],
@@ -21,10 +24,7 @@ export const createWelcomeMessageList = () => ({
 		start: { type: 'date', convert: true, optional: true },
 		end: { type: 'date', convert: true, optional: true },
 	},
-	/**
-	 * @param {import('moleculer').Context} ctx
-	 */
-	async handler(ctx) {
+	async handler(ctx: AppContextMeta<WelcomeMessageListParams>): Promise<WelcomeMessageListReturn> {
 		const { limit, skip, start, end, orgId: _orgId } = ctx.params
 
 		if (_orgId) {
@@ -32,15 +32,13 @@ export const createWelcomeMessageList = () => ({
 				throw new Errors.MoleculerClientError('org not found')
 		}
 
-		if (start && end && start?.getTime() >= end?.getTime()) {
-			throw new Errors.MoleculerClientError('start must less than end')
+		if (start && end && start.getTime() >= end.getTime()) {
+			throw new Errors.MoleculerClientError('start must be less than end')
 		}
 
 		const { orgId: creatorOrgId, empId } = ctx.meta
 
 		const orgId = _orgId ?? creatorOrgId
-
-		// @TODO: filter admin of the org / app here
 
 		const query = {
 			orgId,
@@ -54,4 +52,4 @@ export const createWelcomeMessageList = () => ({
 			sort: { createdAt: -1 },
 		})
 	},
-})
+}

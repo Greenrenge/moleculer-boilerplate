@@ -46,13 +46,15 @@ EventSchema.index({
 	end: -1,
 })
 
-type EventModel = mongoose.Model<EventDocument>
+type EventModel = mongoose.PaginateModel<EventDocument>
+
+export type EventPaginateResult = ReturnType<EventModel['paginate']>
 
 export const Event = mongoose.model<EventDocument, EventModel>('Event', EventSchema)
 
 const WelcomeMessageSchema = new mongoose.Schema({}, schemaOption)
 
-export const WelcomeMessage = Event.discriminator<EventDocument>(
+export const WelcomeMessage = Event.discriminator<EventDocument, EventModel>(
 	'WelcomeMessage',
 	WelcomeMessageSchema,
 	'welcome_message',

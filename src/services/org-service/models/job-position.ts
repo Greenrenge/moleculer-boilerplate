@@ -53,7 +53,7 @@ JobPositionSchema.index({
 	name: 1,
 })
 
-type JobPositionModel = mongoose.Model<JobPositionDocument>
+type JobPositionModel = mongoose.PaginateModel<JobPositionDocument>
 
 export const JobPosition = mongoose.model<JobPositionDocument, JobPositionModel>(
 	'JobPosition',

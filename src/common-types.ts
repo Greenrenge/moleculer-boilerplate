@@ -4,7 +4,7 @@ import type { ResolveTokenReturn } from 'v1.auth.resolveToken'
 
 export type MoleculerService<TExtend = any> = Service<ServiceSettingSchema & TExtend>
 
-export type AppContextMeta<Params> = Context<
+export type AppContextMeta<Params = any> = Context<
 	Params,
 	{
 		// // from mixin at the gateway level

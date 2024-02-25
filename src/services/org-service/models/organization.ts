@@ -75,7 +75,7 @@ OrganizationSchema.statics.getPublicOrg = function () {
 	}
 }
 
-type OrganizationModel = mongoose.Model<OrganizationDocument>
+type OrganizationModel = mongoose.PaginateModel<OrganizationDocument>
 
 export const Organization = mongoose.model<OrganizationDocument, OrganizationModel>(
 	'Organization',

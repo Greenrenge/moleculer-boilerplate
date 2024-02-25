@@ -1,6 +1,9 @@
-// create public org in given date range
-
 import { Errors } from 'moleculer'
+import {
+	WelcomeMessageCreateParams,
+	WelcomeMessageCreateReturn,
+} from 'v1.announcement.welcomeMessage.admin.create'
+import { AppContextMeta } from '@/common-types'
 import { PermActions, PermSubjects } from '@/constants/business'
 import { WelcomeMessage } from '@org/models/event'
 import { Organization } from '@org/models/organization'
@@ -34,7 +37,9 @@ export default {
 	/**
 	 * @param {import('moleculer').Context} ctx
 	 */
-	async handler(ctx) {
+	async handler(
+		ctx: AppContextMeta<WelcomeMessageCreateParams>,
+	): Promise<WelcomeMessageCreateReturn> {
 		const { orgId: _orgId, topic, desc, start, end, compileContentId } = ctx.params
 
 		if (_orgId) {
@@ -46,7 +51,7 @@ export default {
 		}
 
 		if (start?.getTime() >= end?.getTime()) {
-			throw new Errors.MoleculerClientError('start must less than end')
+			throw new Errors.MoleculerClientError('start must be less than end')
 		}
 
 		const { orgId: creatorOrgId, empId } = ctx.meta
@@ -65,6 +70,6 @@ export default {
 			end,
 		})
 
-		return doc.toObject()
+		return doc.toJSON()
 	},
 }

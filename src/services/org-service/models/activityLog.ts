@@ -47,7 +47,7 @@ ActivityLogSchema.index({
 	empId: 1,
 	date: 1,
 })
-type ActivityLogModel = mongoose.Model<ActivityLogDocument>
+type ActivityLogModel = mongoose.PaginateModel<ActivityLogDocument>
 
 export const ActivityLog = mongoose.model<ActivityLogDocument, ActivityLogModel>(
 	'ActivityLog',
