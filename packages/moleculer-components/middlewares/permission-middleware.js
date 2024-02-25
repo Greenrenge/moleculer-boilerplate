@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Ability } from '@casl/ability'
+import { PureAbility } from '@casl/ability'
 import { unpackRules } from '@casl/ability/extra'
 import _ from 'lodash'
 
@@ -64,7 +64,9 @@ export default {
 		const permissions = action.permission || action.permissions
 		if (fetchPermission || permissions) {
 			return async function (ctx) {
-				const ability = new Ability(ctx.meta.permissions ? unpackRules(ctx.meta.permissions) : [])
+				const ability = new PureAbility(
+					ctx.meta.permissions ? unpackRules(ctx.meta.permissions) : [],
+				)
 
 				ctx.locals.permission = ability
 
@@ -91,7 +93,9 @@ export default {
 		const permissions = event.permission || event.permissions
 		if (fetchPermission || permissions) {
 			return async function (ctx) {
-				const ability = new Ability(ctx.meta.permissions ? unpackRules(ctx.meta.permissions) : [])
+				const ability = new PureAbility(
+					ctx.meta.permissions ? unpackRules(ctx.meta.permissions) : [],
+				)
 
 				ctx.locals.permission = ability
 
