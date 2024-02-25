@@ -67,3 +67,8 @@ ADMIN MENU
 - menu setting
 - evaluation setting, have it own link and will be configured to sent to all user in the system
 - multi lang ?
+
+# typescript
+
+method to service
+call by enum type with verify payload

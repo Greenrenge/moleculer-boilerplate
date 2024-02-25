@@ -116,52 +116,17 @@ declare module 'v1.auth.device.update' {
 }
 
 declare module 'v1.auth' {
-	export type AuthModule = {
-		changePassword: {
-			params: import('v1.auth.changePassword').ChangePasswordParams
-			return: import('v1.auth.changePassword').ChangePasswordReturn
-		}
-		connectSocial: {
-			params: import('v1.auth.connectSocial').ConnectSocialParams
-			return: import('v1.auth.connectSocial').ConnectSocialReturn
-		}
-		issueUserAccessToken: {
-			params: import('v1.auth.issueUserAccessToken').IssueUserAccessTokenParams
-			return: import('v1.auth.issueUserAccessToken').IssueUserAccessTokenReturn
-		}
-		login: {
-			params: import('v1.auth.login').LoginParams
-			return: import('v1.auth.login').LoginReturn
-		}
-		register: {
-			params: import('v1.auth.register').RegisterParams
-			return: import('v1.auth.register').RegisterReturn
-		}
-		resolveToken: {
-			params: import('v1.auth.resolveToken').ResolveTokenParams
-			return: import('v1.auth.resolveToken').ResolveTokenReturn
-		}
-		resetPassword: {
-			params: import('v1.auth.resetPassword').ResetPasswordParams
-			return: import('v1.auth.resetPassword').ResetPasswordReturn
-		}
-		forgetPassword: {
-			params: import('v1.auth.forgetPassword').ForgotPasswordParams
-			return: import('v1.auth.forgetPassword').ForgotPasswordReturn
-		}
-		findOneUserLogin: {
-			params: import('v1.auth.findOneUserLogin').FindOneUserLoginParams
-			return: import('v1.auth.findOneUserLogin').FindOneUserLoginReturn
-		}
-		'device.getByUserId': {
-			params: import('v1.auth.device.getByUserId').GetDeviceByUserIdParams
-			return: import('v1.auth.device.getByUserId').GetDeviceByUserIdReturn
-		}
-		'device.update': {
-			params: import('v1.auth.device.update').UpdateDeviceParams
-			return: import('v1.auth.device.update').UpdateDeviceReturn
-		}
+	export enum AuthAction {
+		changePassword = 'v1.auth.changePassword',
+		connectSocial = 'v1.auth.connectSocial',
+		issueUserAccessToken = 'v1.auth.issueUserAccessToken',
+		login = 'v1.auth.login',
+		register = 'v1.auth.register',
+		resolveToken = 'v1.auth.resolveToken',
+		resetPassword = 'v1.auth.resetPassword',
+		forgetPassword = 'v1.auth.forgetPassword',
+		findOneUserLogin = 'v1.auth.findOneUserLogin',
+		'device.getByUserId' = 'v1.auth.device.getByUserId',
+		'device.update' = 'v1.auth.device.update',
 	}
-
-	export type AuthModuleAction = keyof AuthModule
 }

@@ -1,8 +1,8 @@
 import type { ClaimRawRule, SubjectRawRule } from '@casl/ability'
-import type { Context, Service, ServiceSettingSchema } from 'moleculer'
+import type { CallingOptions, Context, Service, ServiceSettingSchema } from 'moleculer'
 import type { ResolveTokenReturn } from 'v1.auth.resolveToken'
 
-export type MoleculerService = Service<ServiceSettingSchema>
+export type MoleculerService<TExtend = any> = Service<ServiceSettingSchema & TExtend>
 
 export type AppContextMeta<Params> = Context<
 	Params,

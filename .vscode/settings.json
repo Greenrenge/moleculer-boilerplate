@@ -1,4 +1,5 @@
 {
 	"html.validate.styles": false,
-	"javascript.preferences.importModuleSpecifier": "non-relative"
+	"javascript.preferences.importModuleSpecifier": "non-relative",
+	"CodeGPT.apiKey": "CodeGPT Plus Beta"
 }
