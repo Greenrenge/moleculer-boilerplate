@@ -16,6 +16,7 @@ if implement as msgqueue, what if restart service and need to rollback the messa
 - request and then permission changed in the middle of request ? override by the new permission and find the way to force user has new token ?
 - invitation with magic link to create a password
 - cloudflare worker + kv to cache ?
+- use strict to prevent the public exposed api
 
 # framework
 
